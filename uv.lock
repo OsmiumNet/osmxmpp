@@ -1,0 +1,23 @@
+version = 1
+revision = 3
+requires-python = ">=3.13"
+
+[[package]]
+name = "osmxml"
+version = "0.3.3"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/79/fe/b9ce1b71bb5f4cc493642562893f3495d6cfed0377818b58d7cbaaaf7eca/osmxml-0.3.3.tar.gz", hash = "sha256:0b378ac72ea476e1341434d1237ffb9fdfaa8fce26b4aee32a720bcfca50e0f8", size = 5377, upload-time = "2025-08-26T20:31:55.063Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/36/21/bfe293fccb4e20f0dacb13beb4ff68430b719424e3849ef6d75047dccf5f/osmxml-0.3.3-py3-none-any.whl", hash = "sha256:c21eafca01d0e7537fd74c0d5ddfeb27608d533ba6913cad289499d54bcab59e", size = 5454, upload-time = "2025-08-26T20:31:54.141Z" },
+]
+
+[[package]]
+name = "osmxmpp"
+version = "0.1.0"
+source = { virtual = "." }
+dependencies = [
+    { name = "osmxml" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "osmxml", specifier = ">=0.3.3" }]
