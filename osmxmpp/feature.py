@@ -25,7 +25,7 @@ class TLSFeature(XMPPFeature):
             return None
 
         tls_handshake = XMLElement(
-            "starttls", 
+            "starttls",
 
             attributes = [
                 XMLAttribute("xmlns", "urn:ietf:params:xml:ns:xmpp-tls")
