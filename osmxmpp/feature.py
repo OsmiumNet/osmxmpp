@@ -5,5 +5,5 @@ class XMPPFeature:
     def __init__(self):
         pass
 
-    def client(self, client:XMPPClient, features:XMLElement):
+    def handle_client(self, client:XMPPClient, features:XMLElement):
         pass
