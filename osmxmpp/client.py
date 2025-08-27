@@ -70,7 +70,7 @@ class XMPPClient:
                 new_features_xml = None
                 for i, children in enumerate(features_xml.children):
                     for feature in features:
-                        new_features_xml = feature.handle_client(children)
+                        new_features_xml = feature.handle_client(self, children)
                         if new_features_xml:
                            break 
                     
