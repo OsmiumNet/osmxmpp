@@ -5,9 +5,11 @@ from .client import XMPPClient
 
 from .feature import XMPPFeature
 from .tls_feature import TLSFeature
+from .sasl_feature import SASLFeature
 
 __all__ = [
     "XMPPClient",
     "XMPPFeature",
     "TLSFeature",
+    "SASLFeature",
 ]
