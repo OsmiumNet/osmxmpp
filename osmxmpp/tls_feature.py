@@ -30,7 +30,7 @@ class TLSFeature(XMPPFeature):
         data = client.socket.recv(4096)
         data = XMLParser.parse_elements(data.decode("utf-8"))[0]
 
-        tls_socket = self.ssl_context.wrap_socket(client.socket, server_hostname=client.server)
+        tls_socket = self.ssl_context.wrap_socket(client.socket, server_hostname=client.host)
         client.socket = tls_socket
         client.socket.do_handshake()
         
