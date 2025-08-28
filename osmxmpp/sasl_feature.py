@@ -1,6 +1,6 @@
-from .client import XMPPClient
 import base64
 from osmxml import *
+from .feature import XMPPFeature
 
 class SASLMechanism:
     def __init__(self):
@@ -13,7 +13,7 @@ class PLAINMechanism(SASLMechanism):
         self.__auth_string = f"\0{username}\0{password}"
         self.__auth_string = base64.b64encode(self.__auth_string.encode("utf-8")).decode()
 
-    def handle_client(self, client:XMPPClient, mechanisms:List[XMLElement]) -> XMLElement:
+    def handle_client(self, client, mechanisms):
         if "PLAIN" in [str(mechanism.children[0].value) for mechanism in mechanisms]:
             auth_xml = XMLElement(
                 "auth",
@@ -39,11 +39,11 @@ class PLAINMechanism(SASLMechanism):
 
 
 class SASLFeature(XMPPFeature):
-    def __init__(self, mechanisms:List[SASLMechanism]):
+    def __init__(self, mechanisms):
         super().__init__()
         self.mechanisms = mechanisms
     
-    def handle_client(self, client:XMPPClient, feature:XMLElement) -> XMLElement:
+    def handle_client(self, client, feature):
         if not feature.name == "mechanisms":
             return None
 

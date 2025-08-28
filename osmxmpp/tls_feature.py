@@ -1,4 +1,4 @@
-from .client import XMPPClient
+from .feature import XMPPFeature
 from osmxml import *
 import socket, ssl
 
@@ -13,7 +13,7 @@ class TLSFeature(XMPPFeature):
         if verify_locations is not None:
             self.ssl_context.load_verify_locations(verify_locations)
 
-    def handle_client(self, client:XMPPClient, feature:XMLElement) -> XMLElement:
+    def handle_client(self, client, feature):
         if feature.name != "starttls":
             return None
 
