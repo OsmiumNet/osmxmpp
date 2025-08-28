@@ -6,6 +6,7 @@ from .client import XMPPClient
 from .feature import XMPPFeature
 from .tls_feature import TLSFeature
 from .sasl_feature import SASLFeature, PLAINMechanism
+from .bind_feature import BindFeature
 
 __all__ = [
     "XMPPClient",
@@ -15,5 +16,7 @@ __all__ = [
     "TLSFeature",
 
     "SASLFeature",
-    "PLAINMechanism"
+    "PLAINMechanism",
+
+    "BindFeature",
 ]
