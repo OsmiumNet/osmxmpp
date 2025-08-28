@@ -52,7 +52,7 @@ class BindFeature(XMPPFeature):
         if data.get_child_by_name("bind") is None:
             return None
         
-        jid = data.get_child_by_name("bind").get_child_by_name("jid").text
+        jid = data.get_child_by_name("bind").get_child_by_name("jid").children[0].text
 
         client.jid = jid
         client.resource = self.resource
