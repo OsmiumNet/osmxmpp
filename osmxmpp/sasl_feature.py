@@ -33,6 +33,8 @@ class PLAINMechanism(SASLMechanism):
             data = client.socket.recv(4096)
             data = XMLParser.parse_elements(data.decode("utf-8"))[0]
 
+            client._start_xmpp_stream()
+
             return client._receive_stream_features()
 
 
