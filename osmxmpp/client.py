@@ -34,7 +34,7 @@ class XMPPClient:
                 XMLAttribute("xmlns", "jabber:client"), 
                 XMLAttribute("xmlns:stream", "http://etherx.jabber.org/streams"), 
                 XMLAttribute("version", "1.0"), 
-                XMLAttribute("to", host)
+                XMLAttribute("to", self.host)
             ],
             is_closed=False
         )
