@@ -14,7 +14,7 @@ class PLAINMechanism(SASLMechanism):
         self.__auth_string = base64.b64encode(self.__auth_string.encode("utf-8")).decode()
 
     def handle_client(self, client, mechanisms):
-        if "PLAIN" in [str(mechanism.children[0].value) for mechanism in mechanisms]:
+        if "PLAIN" in [mechanism.children[0].text for mechanism in mechanisms]:
             auth_xml = XMLElement(
                 "auth",
 
