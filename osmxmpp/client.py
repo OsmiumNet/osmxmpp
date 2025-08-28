@@ -6,8 +6,8 @@ from .feature import XMPPFeature
 from typing import Callable, List
 
 class XMPPClient:
-    def __init__(self, server:str, port:int=5222):
-        self.server = server
+    def __init__(self, host:str, port:int=5222):
+        self.host = host
         self.port = port
 
         self.connected = False
