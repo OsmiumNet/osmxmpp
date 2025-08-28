@@ -63,7 +63,7 @@ class XMPPClient:
             for handler in self.handlers["connected"]:
                 handler()
             
-            self._start_xmp_stream()
+            self._start_xmpp_stream()
 
             features_xml = self._receive_stream_features()
             while True:
