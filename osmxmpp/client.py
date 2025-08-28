@@ -80,3 +80,6 @@ class XMPPClient:
                 if not new_features_xml:
                     break
                 features_xml = new_features_xml
+            
+            for handler in self.handlers["ready"]:
+                handler()
