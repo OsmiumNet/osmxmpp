@@ -57,7 +57,7 @@ class XMPPClient:
             features = []
         
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as self.socket:
-            self.socket.connect((host, port))
+            self.socket.connect((self.host, self.port))
 
             self.connected = True
             for handler in self.handlers["connected"]:
