@@ -18,11 +18,11 @@ class XMPPClient:
         }
 
 
-    def connected(self, handler:Callable) -> Callable:
+    def on_connected(self, handler:Callable) -> Callable:
         self.handlers["connected"].append(handler)
         return handler
     
-    def ready(self, handler:Callable) -> Callable:
+    def on_ready(self, handler:Callable) -> Callable:
         self.handlers["ready"].append(handler)
         return handler
 
