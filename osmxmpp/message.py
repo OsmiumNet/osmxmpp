@@ -8,17 +8,17 @@ class _XMPPMessageElement:
         if self._xml.get_attribute_by_name(name):
             return self._xml.get_attribute_by_name(name).value.value
         
-        return _getXMPPMessageElementOrText(self._xml.get_child_by_name(name))
+        return _get_xmpp_message_element_or_text(self._xml.get_child_by_name(name))
         
         return None
     
     def __getitem__(self, index):
-        return _getXMPPMessageElementOrText(self._xml.children[index])
+        return _get_xmpp_message_element_or_text(self._xml.children[index])
 
-def _getXMPPMessageElementOrText(xml:XMLElement) -> _XMPPMessageElement | str:
-    hasOneChild = len(xml.children) == 1
+def _get_xmpp_message_element_or_text(xml: XMLElement) -> _XMPPMessageElement | str:
+    has_one_child = len(xml.children) == 1
 
-    if hasOneChild and hasattr(xml.children[0], "text"):
+    if has_one_child and hasattr(xml.children[0], "text"):
         return xml.children[0].text
     else:
         return _XMPPMessageElement(xml)
@@ -29,7 +29,7 @@ class XMPPMessage:
     XMPP message implementation.
     """
 
-    def __init__(self, xml:XMLElement=None):
+    def __init__(self, xml: XMLElement=None):
         if xml:
             self._xml = xml
         else:
@@ -47,7 +47,7 @@ class XMPPMessage:
 
         if self._xml.get_child_by_name(name):
 
-            return _getXMPPMessageElementOrText(self._xml.get_child_by_name(name))
+            return _get_xmpp_message_element_or_text(self._xml.get_child_by_name(name))
 
         return None
     
