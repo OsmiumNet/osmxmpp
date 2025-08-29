@@ -6,13 +6,34 @@ from abc import ABC, abstractmethod
 from typing import List
 
 class SASLMechanism(ABC):
+    """
+    SASL mechanisms are used to authenticate the user.
+
+    Attributes:
+        name (str): The name of the mechanism.
+    """
+
     name = None
 
     @abstractmethod
     def process(self, ci):
+        """
+        Processes the mechanism.
+
+        Args:
+            ci (XMPPCI): The client interface given from the SASLFeature.
+        """
         ...
 
 class PLAINMechanism(SASLMechanism):
+    """
+    PLAIN SASL mechanism implementation.
+
+    Attributes:
+        username (str): The username to authenticate with.
+        password (str): The password to authenticate with.
+    """
+
     name = "PLAIN"
 
     def __init__(self, username:str, password:str):
@@ -40,6 +61,16 @@ class PLAINMechanism(SASLMechanism):
 
 
 class SASLFeature(XMPPFeature):
+    """
+    SASL feature implementation.
+
+    Attributes:
+        mechanisms (List[SASLMechanism]): The SASL mechanisms to use.
+    
+    Raises:
+        Exception: If authentication fails.
+    """
+
     id = "osmiumnet.sasl"
     tag = "mechanisms"
 
