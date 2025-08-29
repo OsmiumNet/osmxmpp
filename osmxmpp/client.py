@@ -245,3 +245,7 @@ class XMPPClient:
                 handler()
 
             self._listen()
+    
+
+    def __repr__(self):
+        return f"<XMPPClient {self.host}:{self.port}>"
