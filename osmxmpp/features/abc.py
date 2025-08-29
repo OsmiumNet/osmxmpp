@@ -21,7 +21,7 @@ class XMPPFeature(ABC):
         Connects the feature to the client interface.
 
         Args:
-            ci (XMPPCI): The client interface.
+            ci (XMPPClientInterface): The client interface.
         """
         ...
     
