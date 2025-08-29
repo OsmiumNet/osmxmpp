@@ -4,7 +4,7 @@ import socket, ssl
 from .permission import XMPPPermission
 from .message import XMPPMessage
 from .features import XMPPFeature
-from .extensions import XMPPExtensions
+from .extensions import XMPPExtension
 from .ci import XMPPClientInterface
 
 from typing import Callable, List, Tuple
