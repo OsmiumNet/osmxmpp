@@ -5,7 +5,7 @@ from .permission import XMPPPermission
 
 from typing import List, Callable
 
-class XMPPCI:
+class XMPPClientInterface:
     """
     XMPP client interface implementation.
     Used by Features or Extensions to interact with the XMPP client.
