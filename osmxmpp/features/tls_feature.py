@@ -3,6 +3,14 @@ from osmxml import *
 import socket, ssl
 
 class TLSFeature(XMPPFeature):
+    """
+    TLS feature implementation.
+
+    Attributes:
+        ssl_context (ssl.SSLContext): The SSL context to use.
+        verify_locations (List[str]): The locations to verify the server certificate.
+    """
+
     id = "osmiumnet.tls"
     tag = "starttls"
 
