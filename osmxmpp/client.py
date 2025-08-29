@@ -6,7 +6,7 @@ from .message import XMPPMessage
 from .feature import XMPPFeature
 from .ci import XMPPCI
 
-from typing import Callable, List
+from typing import Callable, List, Tuple
 
 class XMPPClient:
     """
@@ -280,6 +280,22 @@ class XMPPClient:
         self.__features[feature.id] = feature
         self.__features_queue.append(feature.id)
 
+    def connect_features(self, features_with_permissions: List[Tuple[XMPPFeature, List[XMPPPermission] | XMPPPermission.ALL]] ) -> None:
+        """
+        Connects the given features to the XMPP client.
+
+        Args:
+            features_with_permissions (List[Tuple[XMPPFeature, List[XMPPPermission] | XMPPPermission.ALL]]): The features with permissions to connect
+        
+        Example:
+            >>> client.connect_features([
+            ...     (TLSFeature(), [XMPPPersmision.SEND_XML, XMPPPersmision.RECV_XML])
+            ...     (BindFeature("osmxmpp"), XMPPPermission.ALL)
+            ... ])
+        """
+
+        for feature_with_permissions in features_with_permissions:
+            self.connect_feature(feature_with_permissions[0], feature_with_permissions[1]) 
 
     def connect(self) -> None:
         """
