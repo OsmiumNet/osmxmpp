@@ -299,7 +299,7 @@ class XMPPClient:
         """
 
         for feature_with_permissions in features_with_permissions:
-            self.connect_feature(feature_with_permissions[0], feature_with_permissions[1]) 
+            self.connect_feature(self, feature_with_permissions[0], feature_with_permissions[1]) 
 
 
     def connect_extension(self, extension:XMPPExtension, permissions: List[XMPPPermission] | XMPPPermission.ALL) -> None:
