@@ -173,6 +173,95 @@ class XMPPCI:
         self.__handle_permission(XMPPPermission.OPEN_STREAM)
         return self.__client._start_xmpp_stream()
     
+    def on_connect(self, handler:Callable) -> Callable:
+        """
+        Registers a handler for the connected event.
+        The handler will be called when the client is connected to the XMPP server, but not ready yet.
+
+        Args:
+            handler (Callable): The handler to register.
+
+        Returns:
+            Callable: The handler (not changed).
+        """
+        self.__handle_permission(XMPPPermission.LISTEN_ON_CONNECT)
+        return self.__client.on_connect(handler)
+    
+    def on_disconnect(self, handler:Callable) -> Callable:
+        """
+        Registers a handler for the disconnected event.
+        The handler will be called when the client is disconnected from the XMPP server.
+
+        Args:
+            handler (Callable): The handler to register.
+
+        Returns:
+            Callable: The handler (not changed).
+        """
+        self.__handle_permission(XMPPPermission.LISTEN_ON_DISCONNECT)
+        return self.__client.on_disconnect(handler)
+    
+    def on_ready(self, handler:Callable) -> Callable:
+        """
+        Registers a handler for the ready event.
+        The handler will be called when the client is ready to send and receive XMPP stanzas.
+
+        Args:
+            handler (Callable): The handler to register.
+
+        Returns:
+            Callable: The handler (not changed).
+        
+        Example:
+            >>> @client.on_ready
+            ... def on_ready():
+            ...     print(f"Loggened in as {client.jid}")
+        """
+        self.__handle_permission(XMPPPermission.LISTEN_ON_READY)
+        return self.__client.on_ready(handler)
+
+    def on_message(self, handler:Callable) -> Callable:
+        """
+        Registers a handler for the message event.
+        The handler will be called when the client receives a message stanza.
+
+        Args:
+            handler (Callable): The handler to register.
+
+        Returns:
+            Callable: The handler (not changed).
+        """
+        self.__handle_permission(XMPPPermission.LISTEN_ON_MESSAGE)
+        return self.__client.on_message(handler)
+    
+    def on_presence(self, handler:Callable) -> Callable:
+        """
+        Registers a handler for the presence event.
+        The handler will be called when the client receives a presence stanza.
+
+        Args:
+            handler (Callable): The handler to register.
+
+        Returns:
+            Callable: The handler (not changed).
+        """
+        self.__handle_permission(XMPPPermission.LISTEN_ON_PRESENCE)
+        return self.__client.on_presence(handler)
+    
+    def on_iq(self, handler:Callable) -> Callable:
+        """
+        Registers a handler for the iq event.
+        The handler will be called when the client receives an iq stanza.
+
+        Args:
+            handler (Callable): The handler to register.
+
+        Returns:
+            Callable: The handler (not changed).
+        """
+        self.__handle_permission(XMPPPermission.LISTEN_ON_IQ)
+        return self.__client.on_iq(handler)
+    
     def disconnect(self):
         """
         Disconnects from the XMPP server.
