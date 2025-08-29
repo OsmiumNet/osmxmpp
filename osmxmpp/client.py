@@ -333,7 +333,7 @@ class XMPPClient:
         """
 
         for extension_with_permissions in extensions_with_permissions:
-            self.connect_extension(extension_with_permissions[0], extension_with_permissions[1])
+            self.connect_extension(self, extension_with_permissions[0], extension_with_permissions[1])
 
 
     def connect(self) -> None:
