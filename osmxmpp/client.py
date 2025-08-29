@@ -195,10 +195,7 @@ class XMPPClient:
                     for handler in self.__handlers["iq"]:
                         handler(element)
 
-    def connect_feature(self, feature:XMPPFeature, permissions:List[XMPPPermission]=None) -> None:
-        if permissions is None:
-            permissions = []
-        
+    def connect_feature(self, feature:XMPPFeature, permissions: List[XMPPPermission] | XMPPPermission.ALL = XMPPPermission.ALL) -> None:
         feature.connect_ci(XMPPCI(self, permissions))
         self.__features[feature.id] = feature
 
