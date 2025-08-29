@@ -26,7 +26,7 @@ class XMPPClient:
         self.__connected = False
 
         self.__hooks = {
-            "mesasge": [],
+            "message": [],
             "presence": [],
             "iq": [],
         }
