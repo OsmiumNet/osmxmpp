@@ -170,8 +170,7 @@ class XMPPClient:
         while True:
             data = self.socket.recv(4096)
             if not data:
-                for handler in self.__handlers["disconnected"]:
-                    handler()
+                self.disconnect()
                 break
 
             buffer += data.decode("utf-8")
@@ -249,6 +248,7 @@ class XMPPClient:
                 handler()
 
             self._listen()
+            self.socket.close()
     
     def disconnect(self):
         """
@@ -259,6 +259,11 @@ class XMPPClient:
             raise Exception("XMPPClient is not connected")
 
         self._close_xmpp_stream()
+        self.socket.close()
+        self.__connected = False
+
+        for handler in self.__handlers["disconnected"]:
+            handler()
     
 
     def __repr__(self):
