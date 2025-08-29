@@ -8,8 +8,12 @@ from typing import Callable, List
 
 
 class XMPPCI:
-    def __init__(self, client, permissions:List[XMPPPermission]=None):
+    def __init__(self, client, permissions: List[XMPPPermission] | XMPPPermission.ALL):
         self.__client = client
+        
+        if permissions == XMPPPermission.ALL:
+            permissions = [XMPPPermission.ALL]
+
         self.__permissions = permissions
     
     def __handle_permission(self, permission:XMPPPermission):
