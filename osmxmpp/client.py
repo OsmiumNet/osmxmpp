@@ -35,6 +35,7 @@ class XMPPClient:
         }
 
         self.__features = {}
+        self.__features_queue = []
 
 
     @property
@@ -209,6 +210,7 @@ class XMPPClient:
         
         feature.connect_ci(XMPPCI(self, permissions))
         self.__features[feature.id] = feature
+        self.__features_queue.append(feature.id)
 
 
     def connect(self) -> None:
@@ -227,7 +229,9 @@ class XMPPClient:
             features_xml = self._recv_xml()
             while True:
                 processed_feature = None
-                for feature in self.__features.values():
+                for feature_id in self.__features_queue:
+                    feature = self.__features[feature_id]
+
                     feature_xml = features_xml.get_child_by_name(feature.tag)
                     if feature_xml:
                         feature.process(feature_xml)
