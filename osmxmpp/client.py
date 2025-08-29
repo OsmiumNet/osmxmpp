@@ -27,12 +27,11 @@ class XMPPCI:
 
     def send_xml(self, xml:XMLElement):
         self.__handle_permission(XMPPPermission.SEND_XML)
-        self.__client.socket.sendall(xml.to_string().encode("utf-8"))
+        return self.__client._send_xml(xml)
     
     def recv_xml(self) -> XMLElement:
         self.__handle_permission(XMPPPermission.RECV_XML)
-        data = self.__client.socket.recv(4096)
-        return XMLParser.parse_elements(data.decode("utf-8"))[0]
+        return self.__client._recv_xml()
     
     def get_jid(self) -> str:
         self.__handle_permission(XMPPPermission.GET_JID)
@@ -62,15 +61,16 @@ class XMPPCI:
 
     def open_stream(self):
         self.__handle_permission(XMPPPermission.OPEN_STREAM)
-        self.__client._start_xmpp_stream()
+        return self.__client._start_xmpp_stream()
     
     def close_stream(self):
         self.__handle_permission(XMPPPermission.CLOSE_STREAM)
-        self.__client._close_xmpp_stream()
+        return self.__client._close_xmpp_stream()
     
     def change_socket(self, socket):
         self.__handle_permission(XMPPPermission.CHANGE_SOCKET)
         self.__client.socket = socket
+        return
     
     def get_socket(self) -> socket:
         self.__handle_permission(XMPPPermission.GET_SOCKET)
@@ -96,6 +96,7 @@ class XMPPClient:
         }
 
         self.__features = {}
+
 
     @property
     def connected(self):
@@ -127,6 +128,14 @@ class XMPPClient:
         return handler
 
 
+    def _recv_xml(self) -> XMLElement:
+        data = self.socket.recv(4096)
+        return XMLParser.parse_elements(data.decode("utf-8"))[0]
+    
+    def _send_xml(self, xml:XMLElement):
+        self.socket.sendall(xml.to_string().encode("utf-8"))
+
+
     def _start_xmpp_stream(self):
         stream_start = XMLElement(
             "stream:stream", 
@@ -139,24 +148,15 @@ class XMPPClient:
             is_closed=False
         )
 
-        self.socket.sendall(stream_start.to_string().encode("utf-8"))
-
-        data = self.socket.recv(4096)
-        return XMLParser.parse_elements(data.decode("utf-8"))[0]
+        self._send_xml(stream_start)
+        return self._recv_xml()
     
     def _close_xmpp_stream(self):
         self.socket.sendall(b"</stream:stream>")
     
-    def _receive_stream_features(self):
-        data = self.socket.recv(4096)
-        return XMLParser.parse_elements(data.decode("utf-8"))[0]
-    
     def _send_presence(self):
-        presence = XMLElement(
-            "presence",
-        )
-
-        self.socket.sendall(presence.to_string().encode("utf-8"))
+        presence = XMLElement("presence")
+        self._send_xml(presence)
     
 
     def _listen(self):
@@ -209,7 +209,7 @@ class XMPPClient:
             
             self._start_xmpp_stream()
 
-            features_xml = self._receive_stream_features()
+            features_xml = self._recv_xml()
             while True:
                 processed_feature = None
                 for feature in self.__features.values():
@@ -222,7 +222,7 @@ class XMPPClient:
                 if not processed_feature.receive_new_features:
                     break
 
-                features_xml = self._receive_stream_features()
+                features_xml = self._recv_xml()
             
             self._send_presence()
 
