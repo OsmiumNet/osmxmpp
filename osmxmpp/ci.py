@@ -141,22 +141,6 @@ class XMPPCI:
         """
         self.__handle_permission(XMPPPermission.GET_PORT)
         return self.__client.port
-
-    def open_stream(self):
-        """
-        Opens the XMPP stream.
-        Requires the OPEN_STREAM permission.
-        """
-        self.__handle_permission(XMPPPermission.OPEN_STREAM)
-        return self.__client._start_xmpp_stream()
-    
-    def disconnect(self):
-        """
-        Disconnects from the XMPP server.
-        Requires the DISCONNECT permission.
-        """
-        self.__handle_permission(XMPPPermission.DISCONNECT)
-        return self.__client.disconnect()
     
     def change_socket(self, socket):
         """
@@ -180,6 +164,22 @@ class XMPPCI:
         """
         self.__handle_permission(XMPPPermission.GET_SOCKET)
         return self.__client.socket
+    
+    def open_stream(self):
+        """
+        Opens the XMPP stream.
+        Requires the OPEN_STREAM permission.
+        """
+        self.__handle_permission(XMPPPermission.OPEN_STREAM)
+        return self.__client._start_xmpp_stream()
+    
+    def disconnect(self):
+        """
+        Disconnects from the XMPP server.
+        Requires the DISCONNECT permission.
+        """
+        self.__handle_permission(XMPPPermission.DISCONNECT)
+        return self.__client.disconnect()
     
 
     def __repr__(self):
