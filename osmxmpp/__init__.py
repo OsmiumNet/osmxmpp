@@ -5,7 +5,7 @@ from .permission import XMPPPermission
 
 from .message import XMPPMessage
 
-from .ci import XMPPCI
+from .ci import XMPPClientInterface
 from .client import XMPPClient
 
 from .features.abc import XMPPFeature
@@ -19,7 +19,7 @@ __all__ = [
     "XMPPPermission",
 
     "XMPPClient",
-    "XMPPCI",
+    "XMPPClientInterface",
 
     "XMPPFeature",
 
