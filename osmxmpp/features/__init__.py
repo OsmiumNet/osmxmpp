@@ -1,7 +1,7 @@
 from .abc import XMPPFeature
 from .tls_feature import TLSFeature
 from .sasl_feature import SASLFeature, PLAINMechanism
-from .bind_feature import BindFeature
+from .bind import BindFeature
 
 __all__ = [
     "XMPPFeature",
