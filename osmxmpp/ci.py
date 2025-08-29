@@ -3,7 +3,7 @@ import socket
 
 from .permission import XMPPPermission
 
-from typing import List
+from typing import List, Callable
 
 class XMPPCI:
     """
