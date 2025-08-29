@@ -2,6 +2,13 @@ from .feature import XMPPFeature
 from osmxml import *
 
 class BindFeature(XMPPFeature):
+    """
+    Bind feature implementation.
+
+    Attributes:
+        resource (str): The resource to bind to.
+    """
+
     id = "osmiumnet.bind"
     tag = "bind"
 
