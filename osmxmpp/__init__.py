@@ -3,6 +3,8 @@ __author__ = "osmiumnet"
 
 from .permission import XMPPPermission
 
+from .message import XMPPMessage
+
 from .ci import XMPPCI
 from .client import XMPPClient
 
@@ -12,10 +14,12 @@ from .features.sasl import SASLException, SASLMechanism, SASLFeature, PLAINMecha
 from .features.bind import BindFeature
 
 __all__ = [
-    "XMPPClient",
-    "XMPPCI",
+    "XMPPMessage",
 
     "XMPPPermission",
+
+    "XMPPClient",
+    "XMPPCI",
 
     "XMPPFeature",
 

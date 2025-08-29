@@ -2,6 +2,7 @@ from osmxml import *
 import socket, ssl
 
 from .permission import XMPPPermission
+from .message import XMPPMessage
 from .feature import XMPPFeature
 from .ci import XMPPCI
 
@@ -245,7 +246,8 @@ class XMPPClient:
 
             for element in elements:
                 if element.name == "message":
-                    hooks_result = self._trigger_hooks("message", element)
+                    message = XMPPMessage(element)
+                    hooks_result = self._trigger_hooks("message", message)
                     if hooks_result is None:
                         continue
                     self._trigger_handlers("message", hooks_result)
