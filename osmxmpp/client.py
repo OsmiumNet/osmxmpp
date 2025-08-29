@@ -250,6 +250,16 @@ class XMPPClient:
 
             self._listen()
     
+    def disconnect(self):
+        """
+        Disconnects from the XMPP server.
+        """
+
+        if not self.__connected:
+            raise Exception("XMPPClient is not connected")
+
+        self._close_xmpp_stream()
+    
 
     def __repr__(self):
         return f"<XMPPClient {self.host}:{self.port}>"
