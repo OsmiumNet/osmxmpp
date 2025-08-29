@@ -220,7 +220,6 @@ class XMPPClient:
         )
 
         self._send_xml(stream_start)
-        return self._recv_xml()
     
     def _close_xmpp_stream(self):
         self.socket.sendall(b"</stream:stream>")
@@ -365,7 +364,7 @@ class XMPPClient:
                         processed_feature = feature
                         break
                 
-                if not processed_feature.receive_new_features:
+                if (processed_feature and not processed_feature.receive_new_features):
                     break
 
                 features_xml = self._recv_xml()
