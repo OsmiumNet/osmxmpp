@@ -352,8 +352,26 @@ class XMPPClient:
             
             self._start_xmpp_stream()
 
-            features_xml = self._recv_xml()
+            # Features can sometimes be placed immediately at the start of the stream
+            def recv_xml_features():
+                xml = self._recv_xml()
+                name = "stream:features"
+
+                if (xml.name == name):
+                    return xml
+
+                features = xml.children[0].get_child_by_name(name)
+                if (features):
+                    return features
+
+                return self._recv_xml()
+                
+
+            features_xml = recv_xml_features()
             while True:
+                if (features_xml is None):
+                    raise Exception("No stream features received")
+                    
                 processed_feature = None
                 for feature_id in self.__features_queue:
                     feature = self.__features[feature_id]
@@ -367,7 +385,7 @@ class XMPPClient:
                 if (processed_feature and not processed_feature.receive_new_features):
                     break
 
-                features_xml = self._recv_xml()
+                features_xml = recv_xml_features()
             
             self._send_presence()
 
