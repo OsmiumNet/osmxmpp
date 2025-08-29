@@ -1,9 +1,10 @@
 __version__ = "0.1.0"
 __author__ = "osmiumnet"
 
-from .client import XMPPClient, XMPPCI
-
 from .permission import XMPPPermission
+
+from .ci import XMPPCI
+from .client import XMPPClient
 
 from .features.feature import XMPPFeature
 from .features.tls_feature import TLSFeature
