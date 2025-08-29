@@ -4,7 +4,7 @@ import socket, ssl
 from .permission import XMPPPermission
 from .message import XMPPMessage
 from .feature import XMPPFeature
-from .ci import XMPPCI
+from .ci import XMPPClientInterface
 
 from typing import Callable, List, Tuple
 
@@ -276,7 +276,7 @@ class XMPPClient:
             >>> client.connect_feature(BindFeature("osmxmpp"), XMPPPermission.ALL)
         """
         
-        feature.connect_ci(XMPPCI(self, permissions))
+        feature.connect_ci(XMPPClientInterface(self, permissions))
         self.__features[feature.id] = feature
         self.__features_queue.append(feature.id)
 
