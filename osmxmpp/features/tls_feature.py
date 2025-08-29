@@ -1,4 +1,4 @@
-from .feature import XMPPFeature
+from .abc import XMPPFeature
 from osmxml import *
 import socket, ssl
 
