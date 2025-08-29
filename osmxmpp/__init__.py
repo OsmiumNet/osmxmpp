@@ -8,7 +8,7 @@ from .client import XMPPClient
 
 from .features.abc import XMPPFeature
 from .features.tls_feature import TLSFeature
-from .features.sasl_feature import SASLFeature, PLAINMechanism
+from .features.sasl import SASLFeature, PLAINMechanism
 from .features.bind import BindFeature
 
 __all__ = [
