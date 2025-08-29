@@ -262,6 +262,48 @@ class XMPPCI:
         self.__handle_permission(XMPPPermission.LISTEN_ON_IQ)
         return self.__client.on_iq(handler)
     
+    def hook_message(self, hook:Callable) -> Callable:
+        """
+        Registers a hook for the message event.
+        The hook will be called when the client receives a message stanza.
+
+        Args:
+            hook (Callable): The hook to register.
+
+        Returns:
+            Callable: The hook (not changed).
+        """
+        self.__handle_permission(XMPPPermission.HOOK_MESSAGE)
+        return self.__client.hook_message(hook)
+    
+    def hook_presence(self, hook:Callable) -> Callable:
+        """
+        Registers a hook for the presence event.
+        The hook will be called when the client receives a presence stanza.
+
+        Args:
+            hook (Callable): The hook to register.
+
+        Returns:
+            Callable: The hook (not changed).
+        """
+        self.__handle_permission(XMPPPermission.HOOK_PRESENCE)
+        return self.__client.hook_presence(hook)
+    
+    def hook_iq(self, hook:Callable) -> Callable:
+        """
+        Registers a hook for the iq event.
+        The hook will be called when the client receives an iq stanza.
+
+        Args:
+            hook (Callable): The hook to register.
+
+        Returns:
+            Callable: The hook (not changed).
+        """
+        self.__handle_permission(XMPPPermission.HOOK_IQ)
+        return self.__client.hook_iq(hook)
+    
     def disconnect(self):
         """
         Disconnects from the XMPP server.
