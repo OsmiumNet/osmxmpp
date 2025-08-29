@@ -180,3 +180,7 @@ class XMPPCI:
         """
         self.__handle_permission(XMPPPermission.GET_SOCKET)
         return self.__client.socket
+    
+
+    def __repr__(self):
+        return f"<XMPPClientInterface of '{repr(self.__client)}'>"
