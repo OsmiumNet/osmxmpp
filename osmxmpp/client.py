@@ -264,7 +264,7 @@ class XMPPClient:
                         continue
                     self._trigger_handlers("iq", hooks_result)
 
-    def connect_feature(self, feature:XMPPFeature, permissions: List[XMPPPermission] | XMPPPermission.ALL = XMPPPermission.ALL) -> None:
+    def connect_feature(self, feature:XMPPFeature, permissions: List[XMPPPermission] | XMPPPermission.ALL) -> None:
         """
         Connects the given feature to the XMPP client.
 
