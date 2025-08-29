@@ -24,7 +24,7 @@ class SASLMechanism(ABC):
         Processes the mechanism.
 
         Args:
-            ci (XMPPCI): The client interface given from the SASLFeature.
+            ci (XMPPClientInterface): The client interface given from the SASLFeature.
         """
         ...
 
