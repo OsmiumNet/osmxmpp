@@ -7,7 +7,7 @@ from .ci import XMPPCI
 from .client import XMPPClient
 
 from .features.abc import XMPPFeature
-from .features.tls_feature import TLSFeature
+from .features.tls import TLSFeature
 from .features.sasl import SASLFeature, PLAINMechanism
 from .features.bind import BindFeature
 
