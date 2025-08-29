@@ -25,6 +25,12 @@ class XMPPClient:
 
         self.__connected = False
 
+        self.__hooks = {
+            "mesasge": [],
+            "presence": [],
+            "iq": [],
+        }
+
         self.__handlers = {
             "connected": [],
             "disconnected": [],
@@ -46,6 +52,13 @@ class XMPPClient:
     def _trigger_handlers(self, event:str, *args, **kwargs):
         for handler in self.__handlers[event]:
             handler(*args, **kwargs)
+    
+    def _trigger_hooks(self, event:str, value):
+        for hook in self.__hooks[event]:
+            value = hook(value)
+            if not value:
+                return None
+        return value
 
 
     def on_connect(self, handler:Callable) -> Callable:
@@ -138,6 +151,49 @@ class XMPPClient:
         return handler
 
 
+    def hook_message(self, hook:Callable) -> Callable:
+        """
+        Registers a hook for the message event.
+        The hook will be called when the client receives a message stanza.
+
+        Args:
+            hook (Callable): The hook to register.
+
+        Returns:
+            Callable: The hook (not changed).
+        """
+        self.__hooks["message"].append(hook)
+        return hook
+    
+    def hook_presence(self, hook:Callable) -> Callable:
+        """
+        Registers a hook for the presence event.
+        The hook will be called when the client receives a presence stanza.
+
+        Args:
+            hook (Callable): The hook to register.
+
+        Returns:
+            Callable: The hook (not changed).
+        """
+        self.__hooks["presence"].append(hook)
+        return hook
+    
+    def hook_iq(self, hook:Callable) -> Callable:
+        """
+        Registers a hook for the iq event.
+        The hook will be called when the client receives an iq stanza.
+
+        Args:
+            hook (Callable): The hook to register.
+
+        Returns:
+            Callable: The hook (not changed).
+        """
+        self.__hooks["iq"].append(hook)
+        return hook
+
+
     def _recv_xml(self) -> XMLElement:
         data = self.socket.recv(4096)
         return XMLParser.parse_elements(data.decode("utf-8"))[0]
@@ -189,13 +245,22 @@ class XMPPClient:
 
             for element in elements:
                 if element.name == "message":
-                    self._trigger_handlers("message", element)
+                    hooks_result = self._trigger_hooks("message", element)
+                    if hooks_result is None:
+                        continue
+                    self._trigger_handlers("message", hooks_result)
 
                 elif element.name == "presence":
-                    self._trigger_handlers("presence", element)
+                    hooks_result = self._trigger_hooks("presence", element)
+                    if hooks_result is None:
+                        continue
+                    self._trigger_handlers("presence", hooks_result)
                 
                 elif element.name == "iq":
-                    self._trigger_handlers("iq", element)
+                    hooks_result = self._trigger_hooks("iq", element)
+                    if hooks_result is None:
+                        continue
+                    self._trigger_handlers("iq", hooks_result)
 
     def connect_feature(self, feature:XMPPFeature, permissions: List[XMPPPermission] | XMPPPermission.ALL = XMPPPermission.ALL) -> None:
         """
