@@ -22,7 +22,8 @@ class XMPPPermission(Enum):
     CHANGE_SOCKET = auto()
 
     OPEN_STREAM = auto()
-    CLOSE_STREAM = auto()
+
+    DISCONNECT = auto()
 
     def __str__(self):
         return self.name

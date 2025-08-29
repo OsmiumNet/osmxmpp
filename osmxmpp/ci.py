@@ -150,13 +150,13 @@ class XMPPCI:
         self.__handle_permission(XMPPPermission.OPEN_STREAM)
         return self.__client._start_xmpp_stream()
     
-    def close_stream(self):
+    def disconnect(self):
         """
-        Closes the XMPP stream.
-        Requires the CLOSE_STREAM permission.
+        Disconnects from the XMPP server.
+        Requires the DISCONNECT permission.
         """
-        self.__handle_permission(XMPPPermission.CLOSE_STREAM)
-        return self.__client._close_xmpp_stream()
+        self.__handle_permission(XMPPPermission.DISCONNECT)
+        return self.__client.disconnect()
     
     def change_socket(self, socket):
         """
