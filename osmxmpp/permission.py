@@ -1,6 +1,10 @@
 from enum import Enum, auto
 
 class XMPPPermission(Enum):
+    """
+    Permissions are used to control what actions Feature or Extension can perform.
+    """
+
     ALL = auto()
 
     SEND_XML = auto()
