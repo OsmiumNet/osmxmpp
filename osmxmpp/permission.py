@@ -23,6 +23,13 @@ class XMPPPermission(Enum):
 
     OPEN_STREAM = auto()
 
+    LISTEN_ON_CONNECT = auto()
+    LISTEN_ON_DISCONNECT = auto()
+    LISTEN_ON_READY = auto()
+    LISTEN_ON_MESSAGE = auto()
+    LISTEN_ON_PRESENCE = auto()
+    LISTEN_ON_IQ = auto()
+
     DISCONNECT = auto()
 
     def __str__(self):
