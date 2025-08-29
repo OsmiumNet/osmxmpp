@@ -1,6 +1,8 @@
 from enum import Enum, auto
 
 class XMPPPermission(Enum):
+    ALL = auto()
+
     SEND_XML = auto()
     RECV_XML = auto()
 

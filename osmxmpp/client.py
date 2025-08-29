@@ -13,7 +13,10 @@ class XMPPCI:
         self.__permissions = permissions
     
     def __handle_permission(self, permission:XMPPPermission):
-        if permission in self.__permissions:
+        if self.has_permission(XMPPPermission.ALL):
+            return
+
+        if self.has_permission(permission):
             return
         
         raise Exception(f"No {permission} permission")
