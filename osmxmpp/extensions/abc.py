@@ -3,6 +3,7 @@ from abc import ABC, abstractmethod
 class XMPPExtension(ABC):
     """
     Extensions are used to implement specific XMPP extensions & etc.
+    They have more wider usecase than features.
 
     Attributes:
         id (str): The ID of the extension implementation.

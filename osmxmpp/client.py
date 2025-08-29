@@ -44,6 +44,9 @@ class XMPPClient:
         self.__features = {}
         self.__features_queue = []
 
+        self.__extensions = {}
+        self.__extensions_queue = []
+
 
     @property
     def connected(self):
@@ -297,6 +300,41 @@ class XMPPClient:
         for feature_with_permissions in features_with_permissions:
             self.connect_feature(feature_with_permissions[0], feature_with_permissions[1]) 
 
+
+    def connect_extension(self, extension:XMPPExtension, permissions: List[XMPPPermission] | XMPPPermission.ALL) -> None:
+        """
+        Connects the given extension to the XMPP client.
+
+        Args:
+            extension (XMPPExtension): The extension to connect.
+            permissions (List[XMPPPermission] | XMPPPermission.ALL): The permissions to grant.
+        
+        Example:
+            >>> client.connect_extension(SomeExtension(), XMPPPermission.ALL)
+        """
+        
+        extension.connect_ci(XMPPClientInterface(self, permissions))
+        self.__extensions[extension.id] = extension
+        self.__extensions_queue.append(extension.id)
+    
+    def connect_extensions(self, extensions_with_permissions: List[Tuple[XMPPExtension, List[XMPPPermission] | XMPPPermission.ALL]] ) -> None:
+        """
+        Connects the given extensions to the XMPP client.
+
+        Args:
+            extensions_with_permissions (List[Tuple[XMPPExtension, List[XMPPPermission] | XMPPPermission.ALL]]): The extensions with permissions to connect
+        
+        Example:
+            >>> client.connect_extensions([
+            ...     (SomeExtension(), [XMPPPersmision.SEND_XML, XMPPPersmision.RECV_XML])
+            ...     (SomeOtherExtension(), XMPPPermission.ALL)
+            ... ])
+        """
+
+        for extension_with_permissions in extensions_with_permissions:
+            self.connect_extension(extension_with_permissions[0], extension_with_permissions[1])
+
+
     def connect(self) -> None:
         """
         Connects to the XMPP server.
@@ -305,6 +343,11 @@ class XMPPClient:
             self.socket.connect((self.host, self.port))
 
             self.__connected = True
+
+            for extension_id in self.__extensions_queue:
+                extension = self.__extensions[extension_id]
+                extension.process()
+
             self._trigger_handlers("connected")
             
             self._start_xmpp_stream()
