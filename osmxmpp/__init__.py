@@ -8,6 +8,8 @@ from .message import XMPPMessage
 from .ci import XMPPClientInterface
 from .client import XMPPClient
 
+from .extensions.abc import XMPPExtension
+
 from .features.abc import XMPPFeature
 from .features.tls import TLSFeature
 from .features.sasl import SASLException, SASLMechanism, SASLFeature, PLAINMechanism
@@ -20,6 +22,10 @@ __all__ = [
 
     "XMPPClient",
     "XMPPClientInterface",
+
+
+    "XMPPExtension",
+
 
     "XMPPFeature",
 
