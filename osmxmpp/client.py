@@ -43,6 +43,11 @@ class XMPPClient:
         return self.__connected
     
 
+    def _trigger_handlers(self, event:str, *args, **kwargs):
+        for handler in self.__handlers[event]:
+            handler(*args, **kwargs)
+
+
     def on_connect(self, handler:Callable) -> Callable:
         """
         Registers a handler for the connected event.
@@ -184,16 +189,13 @@ class XMPPClient:
 
             for element in elements:
                 if element.name == "message":
-                    for handler in self.__handlers["message"]:
-                        handler(element)
+                    self._trigger_handlers("message", element)
 
                 elif element.name == "presence":
-                    for handler in self.__handlers["presence"]:
-                        handler(element)
+                    self._trigger_handlers("presence", element)
                 
                 elif element.name == "iq":
-                    for handler in self.__handlers["iq"]:
-                        handler(element)
+                    self._trigger_handlers("iq", element)
 
     def connect_feature(self, feature:XMPPFeature, permissions: List[XMPPPermission] | XMPPPermission.ALL = XMPPPermission.ALL) -> None:
         """
@@ -220,8 +222,7 @@ class XMPPClient:
             self.socket.connect((self.host, self.port))
 
             self.__connected = True
-            for handler in self.__handlers["connected"]:
-                handler()
+            self._trigger_handlers("connected")
             
             self._start_xmpp_stream()
 
@@ -244,8 +245,7 @@ class XMPPClient:
             
             self._send_presence()
 
-            for handler in self.__handlers["ready"]:
-                handler()
+            self._trigger_handlers("ready")
 
             self._listen()
             self.socket.close()
@@ -262,8 +262,7 @@ class XMPPClient:
         self.socket.close()
         self.__connected = False
 
-        for handler in self.__handlers["disconnected"]:
-            handler()
+        self._trigger_handlers("disconnected")
     
 
     def __repr__(self):
