@@ -2,14 +2,18 @@ from .feature import XMPPFeature
 from osmxml import *
 
 class BindFeature(XMPPFeature):
+    id = "osmiumnet.bind"
+    tag = "bind"
+
+    receive_new_features = False
+
     def __init__(self, resource:str):
-        self.resource = resource
-        super().__init__()
+        self.__resource = resource
     
-    def handle_client(self, client, feature):
-        if not feature.name == "bind":
-            return None
-        
+    def connect_ci(self, ci):
+        self.__ci = ci
+    
+    def process(self, element):
         bind_xml = XMLElement(
             "iq",
 
@@ -30,7 +34,7 @@ class BindFeature(XMPPFeature):
                         XMLElement(
                             "resource",
                             children = [
-                                XMLTextElement(self.resource)
+                                XMLTextElement(self.__resource)
                             ]
                         )
                     ]
@@ -38,10 +42,8 @@ class BindFeature(XMPPFeature):
             ]
         )
 
-        client.socket.sendall(bind_xml.to_string().encode("utf-8"))
-
-        data = client.socket.recv(4096)
-        data = XMLParser.parse_elements(data.decode("utf-8"))[0]
+        self.__ci.send_xml(bind_xml)
+        data = self.__ci.recv_xml()
 
         if data.name != "iq":
             return None
@@ -51,10 +53,8 @@ class BindFeature(XMPPFeature):
 
         if data.get_child_by_name("bind") is None:
             return None
-        
+
         jid = data.get_child_by_name("bind").get_child_by_name("jid").children[0].text
 
-        client.jid = jid
-        client.resource = self.resource
-
-        return
+        self.__ci.set_jid(jid)
+        self.__ci.set_resource(self.__resource)
