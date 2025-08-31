@@ -65,6 +65,22 @@ class XMPPClient:
                 return None
         return value
 
+    
+    def _send_mesasge(self, *args, **kwargs):
+        jid = args[0] if len(args) > 0 else kwargs.get("jid")
+        message = args[1] if len(args) > 1 else kwargs.get("message")
+        msg_type = kwargs.get("type")
+
+        message = XMPPMessage()
+        message.set_attrubute("to", jid)
+        message.set_attrubute("type", msg_type)
+
+        message.add_child("body", message)
+        message.body.add_child(XMLTextElement(message))
+
+        self._send_xml(message)
+
+
 
     def on_connect(self, handler:Callable) -> Callable:
         """
