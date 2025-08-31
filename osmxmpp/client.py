@@ -67,7 +67,7 @@ class XMPPClient:
         return value
 
     
-    def send_mesasge(self, *args, **kwargs):
+    def send_message(self, *args, **kwargs):
         jid = args[0] if len(args) > 0 else kwargs.get("jid")
         message = args[1] if len(args) > 1 else kwargs.get("message")
         msg_type = kwargs.get("type")
