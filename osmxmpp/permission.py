@@ -30,9 +30,9 @@ class XMPPPermission(Enum):
     LISTEN_ON_PRESENCE = auto()
     LISTEN_ON_IQ = auto()
 
-    HOOK_MESSAGE = auto()
-    HOOK_PRESENCE = auto()
-    HOOK_IQ = auto()
+    HOOK_ON_MESSAGE = auto()
+    HOOK_ON_PRESENCE = auto()
+    HOOK_ON_IQ = auto()
 
     DISCONNECT = auto()
 
