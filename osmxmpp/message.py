@@ -5,13 +5,13 @@ class _XMPPMessageElement:
         self._xml = xml
 
     def set_attrubute(self, name:str, value:str):
-        self._xml.set_attribute(XMLAttribute(name, value))
+        self._xml.add_attribute(XMLAttribute(name, value))
 
     def get_attribute_by_index(self, index:int):
         return self._xml.get_attribute_by_index(index)
 
-    def add_child(self, name:str, value:str):
-        self._xml.add_child(XMLElement(name, value))
+    def add_child(self, child:XMLElement):
+        self._xml.add_child(child)
     
     def get_child_by_index(self, index:int):
         return _get_xmpp_message_element_or_text(self._xml.get_child_by_index(index))
@@ -55,13 +55,13 @@ class XMPPMessage:
             self._xml = XMLElement("message")
     
     def set_attrubute(self, name:str, value:str):
-        self._xml.set_attribute(XMLAttribute(name, value))
+        self._xml.add_attribute(XMLAttribute(name, value))
 
     def get_attribute_by_index(self, index:int):
         return self._xml.get_attribute_by_index(index)
 
-    def add_child(self, name:str, value:str):
-        self._xml.add_child(XMLElement(name, value))
+    def add_child(self, child:XMLElement):
+        self._xml.add_child(child)
     
     def get_child_by_index(self, index:int):
         return _get_xmpp_message_element_or_text(self._xml.get_child_by_index(index))
