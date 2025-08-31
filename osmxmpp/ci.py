@@ -28,9 +28,6 @@ class XMPPClientInterface:
         self.__permissions = permissions
     
     def __handle_permission(self, permission:XMPPPermission):
-        if self.has_permission(XMPPPermission.ALL):
-            return
-
         if self.has_permission(permission):
             return
         
@@ -47,7 +44,7 @@ class XMPPClientInterface:
         Returns:
             bool: True if the client interface has the permission, False otherwise.
         """
-        return permission in self.__permissions
+        return (XMPPPermission.ALL in self.__permissions) or (permission in self.__permissions)
 
     def send_xml(self, xml:XMLElement):
         """
