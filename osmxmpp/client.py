@@ -82,9 +82,9 @@ class XMPPClient:
         for hook in self.__hooks["send_message"]:
             message = hook(message, *args, **kwargs)
 
-        if message is None:
+        if not message:
             return
-        self._send_xml(message)
+        self._send_xml(message._xml)
 
 
 
