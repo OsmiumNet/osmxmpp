@@ -76,7 +76,7 @@ class XMPPClient:
         message.set_attrubute("to", jid)
         message.set_attrubute("type", msg_type)
 
-        message.add_child("body", XMLElement("body"))
+        message.add_child(XMLElement("body"))
         message.body.add_child(XMLTextElement(content))
 
         for hook in self.__hooks["send_message"]:
