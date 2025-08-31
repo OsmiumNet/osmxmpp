@@ -271,7 +271,7 @@ class XMPPClientInterface:
             Callable: The hook (not changed).
         """
         self.__handle_permission(XMPPPermission.HOOK_ON_MESSAGE)
-        return self.__client.hook_message(hook)
+        return self.__client.hook_on_message(hook)
     
     def hook_on_presence(self, hook:Callable) -> Callable:
         """
@@ -285,7 +285,7 @@ class XMPPClientInterface:
             Callable: The hook (not changed).
         """
         self.__handle_permission(XMPPPermission.HOOK_ON_PRESENCE)
-        return self.__client.hook_presence(hook)
+        return self.__client.hook_on_presence(hook)
     
     def hook_on_iq(self, hook:Callable) -> Callable:
         """
@@ -299,7 +299,7 @@ class XMPPClientInterface:
             Callable: The hook (not changed).
         """
         self.__handle_permission(XMPPPermission.HOOK_ON_IQ)
-        return self.__client.hook_iq(hook)
+        return self.__client.hook_on_iq(hook)
     
     def disconnect(self):
         """

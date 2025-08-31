@@ -28,9 +28,9 @@ class XMPPClient:
         self.__connected = False
 
         self.__hooks = {
-            "message": [],
-            "presence": [],
-            "iq": [],
+            "on_message": [],
+            "on_presence": [],
+            "on_iq": [],
         }
 
         self.__handlers = {
@@ -156,7 +156,7 @@ class XMPPClient:
         return handler
 
 
-    def hook_message(self, hook:Callable) -> Callable:
+    def hook_on_message(self, hook:Callable) -> Callable:
         """
         Registers a hook for the message event.
         The hook will be called when the client receives a message stanza.
@@ -167,10 +167,10 @@ class XMPPClient:
         Returns:
             Callable: The hook (not changed).
         """
-        self.__hooks["message"].append(hook)
+        self.__hooks["on_message"].append(hook)
         return hook
     
-    def hook_presence(self, hook:Callable) -> Callable:
+    def hook_on_presence(self, hook:Callable) -> Callable:
         """
         Registers a hook for the presence event.
         The hook will be called when the client receives a presence stanza.
@@ -181,10 +181,10 @@ class XMPPClient:
         Returns:
             Callable: The hook (not changed).
         """
-        self.__hooks["presence"].append(hook)
+        self.__hooks["on_presence"].append(hook)
         return hook
     
-    def hook_iq(self, hook:Callable) -> Callable:
+    def hook_on_iq(self, hook:Callable) -> Callable:
         """
         Registers a hook for the iq event.
         The hook will be called when the client receives an iq stanza.
@@ -195,7 +195,7 @@ class XMPPClient:
         Returns:
             Callable: The hook (not changed).
         """
-        self.__hooks["iq"].append(hook)
+        self.__hooks["on_iq"].append(hook)
         return hook
 
 
@@ -250,19 +250,19 @@ class XMPPClient:
             for element in elements:
                 if element.name == "message":
                     message = XMPPMessage(element)
-                    hooks_result = self._trigger_hooks("message", message)
+                    hooks_result = self._trigger_hooks("on_message", message)
                     if hooks_result is None:
                         continue
                     self._trigger_handlers("message", hooks_result)
 
                 elif element.name == "presence":
-                    hooks_result = self._trigger_hooks("presence", element)
+                    hooks_result = self._trigger_hooks("on_presence", element)
                     if hooks_result is None:
                         continue
                     self._trigger_handlers("presence", hooks_result)
                 
                 elif element.name == "iq":
-                    hooks_result = self._trigger_hooks("iq", element)
+                    hooks_result = self._trigger_hooks("on_iq", element)
                     if hooks_result is None:
                         continue
                     self._trigger_handlers("iq", hooks_result)
