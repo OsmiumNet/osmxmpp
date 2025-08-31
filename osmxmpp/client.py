@@ -67,7 +67,7 @@ class XMPPClient:
         return value
 
     
-    def _send_mesasge(self, *args, **kwargs):
+    def send_mesasge(self, *args, **kwargs):
         jid = args[0] if len(args) > 0 else kwargs.get("jid")
         message = args[1] if len(args) > 1 else kwargs.get("message")
         msg_type = kwargs.get("type")
@@ -79,6 +79,11 @@ class XMPPClient:
         message.add_child("body", message)
         message.body.add_child(XMLTextElement(message))
 
+        for hook in self.__hooks["send_message"]:
+            message = hook(message)
+
+        if message is None:
+            return
         self._send_xml(message)
 
 
