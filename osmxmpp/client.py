@@ -59,9 +59,9 @@ class XMPPClient:
         for handler in self.__handlers[event]:
             handler(*args, **kwargs)
     
-    def _trigger_hooks(self, event:str, value):
+    def _trigger_hooks(self, event:str, value, *args, **kwargs):
         for hook in self.__hooks[event]:
-            value = hook(value)
+            value = hook(value, *args, **kwargs)
             if not value:
                 return None
         return value
@@ -80,7 +80,7 @@ class XMPPClient:
         message.body.add_child(XMLTextElement(message))
 
         for hook in self.__hooks["send_message"]:
-            message = hook(message)
+            message = hook(message, *args, **kwargs)
 
         if message is None:
             return
