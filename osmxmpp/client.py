@@ -28,6 +28,7 @@ class XMPPClient:
         self.__connected = False
 
         self.__hooks = {
+            "send_message": [],
             "on_message": [],
             "on_presence": [],
             "on_iq": [],
@@ -212,6 +213,20 @@ class XMPPClient:
             Callable: The hook (not changed).
         """
         self.__hooks["on_iq"].append(hook)
+        return hook
+    
+    def hook_send_message(self, hook:Callable) -> Callable:
+        """
+        Registers a hook for the send message event.
+        The hook will be called when the client sends a message.
+        
+        Args:
+            hook (Callable): The hook to register.
+        
+        Returns:
+            Callable: The hook (not changed).
+        """
+        self.__hooks["send_message"].append(hook)
         return hook
 
 
