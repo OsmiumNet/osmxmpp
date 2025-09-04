@@ -1,6 +1,10 @@
 from .abc import XMPPFeature
 from osmxml import *
 
+import logging
+
+logger = logging.getLogger(__name__)
+
 class BindFeature(XMPPFeature):
     """
     Bind feature implementation.
@@ -49,6 +53,8 @@ class BindFeature(XMPPFeature):
             ]
         )
 
+        logger.debug(f"Sending bind request...")
+
         self.__ci.send_xml(bind_xml)
         data = self.__ci.recv_xml()
 
@@ -62,6 +68,8 @@ class BindFeature(XMPPFeature):
             return None
 
         jid = data.get_child_by_name("bind").get_child_by_name("jid").children[0].text
+
+        logger.debug(f"Binded to '{jid}'!")
 
         self.__ci.set_jid(jid)
         self.__ci.set_resource(self.__resource)

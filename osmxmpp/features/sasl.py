@@ -5,6 +5,10 @@ from .abc import XMPPFeature
 from abc import ABC, abstractmethod
 from typing import List
 
+import logging
+
+logger = logging.getLogger(__name__)
+
 class SASLException(Exception):
     pass
 
@@ -89,9 +93,12 @@ class SASLFeature(XMPPFeature):
     def process(self, element):
         mechanisms_xml = element
 
+        logger.debug(f"Processing mechanisms...")
+
         recv_data = None
         for mechanism in self.__mechanisms:
             if mechanism.name in [mechanism_xml.children[0].text for mechanism_xml in mechanisms_xml.children]:
+                logger.debug(f"Processing mechanism '{mechanism.name}'...")
                 recv_data = mechanism.process(self.__ci)
                 break
         

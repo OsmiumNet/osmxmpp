@@ -11,6 +11,10 @@ from .ci import XMPPClientInterface
 
 from typing import Callable, List, Tuple
 
+import logging
+
+logger = logging.getLogger(__name__)
+
 class XMPPClient:
     """
     XMPP client implementation.
@@ -58,10 +62,12 @@ class XMPPClient:
     
 
     def _trigger_handlers(self, event:str, *args, **kwargs):
+        logger.debug(f"Triggering '{event}' handlers...")
         for handler in self.__handlers[event]:
             handler(*args, **kwargs)
     
     def _trigger_hooks(self, event:str, value, *args, **kwargs):
+        logger.debug(f"Triggering '{event}' hooks...")
         for hook in self.__hooks[event]:
             value = hook(value, *args, **kwargs)
             if not value:
@@ -247,6 +253,8 @@ class XMPPClient:
 
 
     def _start_xmpp_stream(self):
+        logger.debug(f"Starting XMPP stream...")
+
         stream_start = XMLElement(
             "stream:stream", 
             attributes = [
@@ -261,14 +269,20 @@ class XMPPClient:
         self._send_xml(stream_start)
     
     def _close_xmpp_stream(self):
+        logger.debug(f"Closing XMPP stream...")
+
         self.socket.sendall(b"</stream:stream>")
     
     def _send_presence(self):
+        logger.debug(f"Sending presence...")
+
         presence = XMLElement("presence")
         self._send_xml(presence)
     
 
     def _listen(self):
+        logger.debug(f"Listening for XMPP stanzas...")
+
         buffer = ""
 
         while True:
@@ -318,6 +332,8 @@ class XMPPClient:
             >>> client.connect_feature(BindFeature("osmxmpp"), XMPPPermission.ALL)
         """
         
+        logger.debug(f"Connecting feature '{feature.id}'...")
+
         feature.connect_ci(XMPPClientInterface(self, permissions))
         self.__features[feature.id] = feature
         self.__features_queue.append(feature.id)
@@ -351,6 +367,8 @@ class XMPPClient:
         Example:
             >>> client.connect_extension(SomeExtension(), XMPPPermission.ALL)
         """
+
+        logger.debug(f"Connecting extension '{extension.id}'...")
         
         extension.connect_ci(XMPPClientInterface(self, permissions))
         self.__extensions[extension.id] = extension
@@ -383,8 +401,13 @@ class XMPPClient:
 
             self.__connected = True
 
+            logger.info(f"Connected to {self.host}:{self.port}")
+
             for extension_id in self.__extensions_queue:
                 extension = self.__extensions[extension_id]
+
+                logger.debug(f"Processing extension '{extension.id}'...")
+
                 extension.process()
 
             self._trigger_handlers("connected")
@@ -417,6 +440,8 @@ class XMPPClient:
 
                     feature_xml = features_xml.get_child_by_name(feature.tag)
                     if feature_xml:
+                        logger.debug(f"Processing feature '{feature.id}'...")
+                        
                         feature.process(feature_xml)
                         processed_feature = feature
                         break
@@ -446,6 +471,7 @@ class XMPPClient:
         self.__connected = False
 
         self._trigger_handlers("disconnected")
+        logger.info(f"Disconnected from {self.host}:{self.port}")
     
 
     def __repr__(self):
