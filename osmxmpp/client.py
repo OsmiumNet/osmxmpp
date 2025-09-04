@@ -1,6 +1,8 @@
 from osmxml import *
 import socket, ssl
 
+import uuid
+
 from .permission import XMPPPermission
 from .message import XMPPMessage
 from .features import XMPPFeature
@@ -75,6 +77,7 @@ class XMPPClient:
         message = XMPPMessage()
         message.set_attrubute("to", jid)
         message.set_attrubute("type", msg_type)
+        message.set_attrubute("id", str(uuid.uuid4()))
 
         message.add_child(XMLElement("body"))
         message.body.add_child(XMLTextElement(content))
