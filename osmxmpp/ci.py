@@ -73,16 +73,23 @@ class XMPPClientInterface:
         self.__handle_permission(XMPPPermission.RECV_XML)
         return self.__client._recv_xml()
     
-    def get_jid(self) -> str:
+    def get_jid(self, with_resouce:bool = True) -> str:
         """
         Gets the JID of the XMPP client.
         Requires the GET_JID permission.
+
+        Args:
+            with_resouce (bool): Whether to include the resource in the JID. (Default: True)
 
         Returns:
             str: The JID of the XMPP client.
         """
         self.__handle_permission(XMPPPermission.GET_JID)
-        return self.__client.jid
+
+        if with_resouce:
+            return self.__client.jid
+        else:
+            return self.__client.jid.split("/")[0]
 
     def get_resource(self) -> str:
         """
