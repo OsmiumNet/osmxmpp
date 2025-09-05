@@ -88,8 +88,8 @@ class XMPPClient:
         message._xml.add_attribute(XMLAttribute("type", msg_type))
         message._xml.add_attribute(XMLAttribute("id", str(uuid.uuid4())))
 
-        message.add_child(XMLElement("body"))
-        message.body.add_child(XMLTextElement(content))
+        message._xml.add_child(XMLElement("body"))
+        message.body._xml.add_child(XMLTextElement(content))
 
         for hook in self.__hooks["send_message"]:
             message = hook(message, *args, **kwargs)
