@@ -17,10 +17,10 @@ class SASLMechanism(ABC):
     SASL mechanisms are used to authenticate the user.
 
     Attributes:
-        name (str): The name of the mechanism.
+        NAME (str): The name of the mechanism.
     """
 
-    name = None
+    NAME = None
 
     @abstractmethod
     def process(self, ci):
@@ -42,7 +42,7 @@ class PLAINMechanism(SASLMechanism):
         password (str): The password to authenticate with.
     """
 
-    name = "PLAIN"
+    NAME = "PLAIN"
 
     def __init__(self, username:str, password:str):
         self.__auth_string = f"\0{username}\0{password}"
@@ -79,10 +79,10 @@ class SASLFeature(XMPPFeature):
         SASLException: If authentication fails.
     """
 
-    id = "osmiumnet.sasl"
-    tag = "mechanisms"
+    ID = "osmiumnet.sasl"
+    TAG = "mechanisms"
 
-    receive_new_features = True
+    RECEIVE_NEW_FEATURES = True
 
     def __init__(self, mechanisms:List[SASLMechanism]):
         self.__mechanisms = mechanisms
@@ -97,8 +97,8 @@ class SASLFeature(XMPPFeature):
 
         recv_data = None
         for mechanism in self.__mechanisms:
-            if mechanism.name in [mechanism_xml.children[0].text for mechanism_xml in mechanisms_xml.children]:
-                logger.debug(f"Processing mechanism '{mechanism.name}'...")
+            if mechanism.NAME in [mechanism_xml.children[0].text for mechanism_xml in mechanisms_xml.children]:
+                logger.debug(f"Processing mechanism '{mechanism.NAME}'...")
                 recv_data = mechanism.process(self.__ci)
                 break
         

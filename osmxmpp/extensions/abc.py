@@ -6,10 +6,10 @@ class XMPPExtension(ABC):
     They have more wider usecase than features.
 
     Attributes:
-        id (str): The ID of the extension implementation.
+        ID (str): The ID of the extension implementation.
     """
 
-    id = None
+    ID = None
     
     @abstractmethod
     def connect_ci(self, ci) -> None:

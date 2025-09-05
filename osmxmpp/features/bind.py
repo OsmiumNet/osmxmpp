@@ -13,10 +13,10 @@ class BindFeature(XMPPFeature):
         resource (str): The resource to bind to.
     """
 
-    id = "osmiumnet.bind"
-    tag = "bind"
+    ID = "osmiumnet.bind"
+    TAG = "bind"
 
-    receive_new_features = False
+    RECEIVE_NEW_FEATURES = False
 
     def __init__(self, resource:str):
         self.__resource = resource

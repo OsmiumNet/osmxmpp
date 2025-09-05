@@ -332,11 +332,11 @@ class XMPPClient:
             >>> client.connect_feature(BindFeature("osmxmpp"), XMPPPermission.ALL)
         """
         
-        logger.debug(f"Connecting feature '{feature.id}'...")
+        logger.debug(f"Connecting feature '{feature.ID}'...")
 
         feature.connect_ci(XMPPClientInterface(self, permissions))
-        self.__features[feature.id] = feature
-        self.__features_queue.append(feature.id)
+        self.__features[feature.ID] = feature
+        self.__features_queue.append(feature.ID)
 
     def connect_features(self, features_with_permissions: List[Tuple[XMPPFeature, List[XMPPPermission] | XMPPPermission.ALL]] ) -> None:
         """
@@ -368,11 +368,11 @@ class XMPPClient:
             >>> client.connect_extension(SomeExtension(), XMPPPermission.ALL)
         """
 
-        logger.debug(f"Connecting extension '{extension.id}'...")
+        logger.debug(f"Connecting extension '{extension.ID}'...")
         
         extension.connect_ci(XMPPClientInterface(self, permissions))
-        self.__extensions[extension.id] = extension
-        self.__extensions_queue.append(extension.id)
+        self.__extensions[extension.ID] = extension
+        self.__extensions_queue.append(extension.ID)
     
     def connect_extensions(self, extensions_with_permissions: List[Tuple[XMPPExtension, List[XMPPPermission] | XMPPPermission.ALL]] ) -> None:
         """
@@ -406,7 +406,7 @@ class XMPPClient:
             for extension_id in self.__extensions_queue:
                 extension = self.__extensions[extension_id]
 
-                logger.debug(f"Processing extension '{extension.id}'...")
+                logger.debug(f"Processing extension '{extension.ID}'...")
 
                 extension.process()
 
@@ -438,15 +438,15 @@ class XMPPClient:
                 for feature_id in self.__features_queue:
                     feature = self.__features[feature_id]
 
-                    feature_xml = features_xml.get_child_by_name(feature.tag)
+                    feature_xml = features_xml.get_child_by_name(feature.TAG)
                     if feature_xml:
-                        logger.debug(f"Processing feature '{feature.id}'...")
+                        logger.debug(f"Processing feature '{feature.ID}'...")
                         
                         feature.process(feature_xml)
                         processed_feature = feature
                         break
                 
-                if (processed_feature and not processed_feature.receive_new_features):
+                if (processed_feature and not processed_feature.RECEIVE_NEW_FEATURES):
                     break
 
                 features_xml = recv_xml_features()

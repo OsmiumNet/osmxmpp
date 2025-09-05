@@ -5,15 +5,15 @@ class XMPPFeature(ABC):
     Features are used to implement specific XMPP stream features.
 
     Attributes:
-        id (str): The ID of the feature implementation.
-        tag (str): The tag of the feature. This is used to identify the feature in the XML stream.
-        receive_new_features (bool): If client should receive new features after processing the current one.
+        ID (str): The ID of the feature implementation.
+        TAG (str): The tag of the feature. This is used to identify the feature in the XML stream.
+        RECEIVE_NEW_FEATURES (bool): Whether the feature should receive new features.
     """
 
-    id = None
-    tag = None
+    ID = None
+    TAG = None
 
-    receive_new_features = None
+    RECEIVE_NEW_FEATURES = None
     
     @abstractmethod
     def connect_ci(self, ci) -> None:

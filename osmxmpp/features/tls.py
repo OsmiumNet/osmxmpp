@@ -15,10 +15,10 @@ class TLSFeature(XMPPFeature):
         verify_locations (List[str]): The locations to verify the server certificate.
     """
 
-    id = "osmiumnet.tls"
-    tag = "starttls"
+    ID = "osmiumnet.tls"
+    TAG = "starttls"
 
-    receive_new_features = True
+    RECEIVE_NEW_FEATURES = True
 
     def __init__(self, ssl_context=None, verify_locations=None):
         if ssl_context is None:
