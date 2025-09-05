@@ -1,6 +1,8 @@
 from osmxml import *
 import socket
 
+from .validation import XMPPValidation
+
 from .permission import XMPPPermission
 
 from typing import List, Callable
@@ -101,6 +103,9 @@ class XMPPClientInterface:
         Args:
             jid (str): The new JID of the XMPP client.
         """
+
+        XMPPValidation.validate_jid(jid)
+
         self.__handle_permission(XMPPPermission.SET_JID)
         self.__client.jid = jid
         return
@@ -113,6 +118,9 @@ class XMPPClientInterface:
         Args:
             resource (str): The new resource of the XMPP client.
         """
+
+        XMPPValidation.validate_resource(resource)
+
         self.__handle_permission(XMPPPermission.SET_RESOURCE)
         self.__client.resource = resource
         return
