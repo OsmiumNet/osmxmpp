@@ -34,6 +34,8 @@ class XMPPPermission(Enum):
     HOOK_ON_PRESENCE = auto()
     HOOK_ON_IQ = auto()
 
+    HOOK_SEND_MESSAGE = auto()
+
     DISCONNECT = auto()
 
     def __str__(self):

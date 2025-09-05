@@ -301,6 +301,20 @@ class XMPPClientInterface:
         self.__handle_permission(XMPPPermission.HOOK_ON_IQ)
         return self.__client.hook_on_iq(hook)
     
+    def hook_send_message(self, hook:Callable) -> Callable:
+        """
+        Registers a hook for the send message event.
+        The hook will be called when the client sends a message.
+        
+        Args:
+            hook (Callable): The hook to register.
+        
+        Returns:
+            Callable: The hook (not changed).
+        """
+        self.__handle_permission(XMPPPermission.HOOK_SEND_MESSAGE)
+        return self.__client.hook_send_message(hook)
+    
     def disconnect(self):
         """
         Disconnects from the XMPP server.
