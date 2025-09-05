@@ -1,6 +1,8 @@
 __version__ = "0.1.0"
 __author__ = "osmiumnet"
 
+from .validation import XMPPValidation, ValidationException
+
 from .permission import XMPPPermission
 
 from .message import XMPPMessage
@@ -16,6 +18,9 @@ from .features.sasl import SASLException, SASLMechanism, SASLFeature, PLAINMecha
 from .features.bind import BindFeature
 
 __all__ = [
+    "XMPPValidation",
+    "ValidationException",
+
     "XMPPMessage",
 
     "XMPPPermission",
