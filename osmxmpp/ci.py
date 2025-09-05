@@ -52,7 +52,7 @@ class XMPPClientInterface:
         for permission in permissions:
             if permission in self.__permissions:
                 return True
-                
+
         return False
 
     def send_xml(self, xml:XMLElement):
@@ -101,12 +101,12 @@ class XMPPClientInterface:
     def get_resource(self) -> str:
         """
         Gets the resource of the XMPP client.
-        Requires the GET_RESOURCE permission.
+        Requires the GET_RESOURCE or GET_JID permissions.
 
         Returns:
             str: The resource of the XMPP client.
         """
-        self.__handle_permission(XMPPPermission.GET_RESOURCE)
+        self.__handle_permission(XMPPPermission.GET_RESOURCE, XMPPPermission.GET_JID)
         return self.__client.resource
 
     def set_jid(self, jid:str):
