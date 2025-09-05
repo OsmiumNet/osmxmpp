@@ -3,6 +3,7 @@ import socket, ssl
 
 import uuid
 
+from .validation import XMPPValidation
 from .permission import XMPPPermission
 from .message import XMPPMessage
 from .features import XMPPFeature
@@ -79,6 +80,8 @@ class XMPPClient:
         jid = args[0] if len(args) > 0 else kwargs.get("jid")
         content = args[1] if len(args) > 1 else kwargs.get("message")
         msg_type = kwargs.get("type")
+
+        XMPPValidation.validate_jid(jid)
 
         message = XMPPMessage()
         message.set_attrubute("to", jid)
@@ -334,6 +337,8 @@ class XMPPClient:
         
         logger.debug(f"Connecting feature '{feature.ID}'...")
 
+        XMPPValidation.validate_id(feature.ID)
+
         feature.connect_ci(XMPPClientInterface(self, permissions))
         self.__features[feature.ID] = feature
         self.__features_queue.append(feature.ID)
@@ -369,6 +374,8 @@ class XMPPClient:
         """
 
         logger.debug(f"Connecting extension '{extension.ID}'...")
+
+        XMPPValidation.validate_id(extension.ID)
         
         extension.connect_ci(XMPPClientInterface(self, permissions))
         self.__extensions[extension.ID] = extension
