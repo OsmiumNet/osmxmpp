@@ -84,9 +84,9 @@ class XMPPClient:
         XMPPValidation.validate_jid(jid)
 
         message = XMPPMessage()
-        message.set_attrubute("to", jid)
-        message.set_attrubute("type", msg_type)
-        message.set_attrubute("id", str(uuid.uuid4()))
+        message._xml.add_attribute(XMLAttribute("to", jid))
+        message._xml.add_attribute(XMLAttribute("type", msg_type))
+        message._xml.add_attribute(XMLAttribute("id", str(uuid.uuid4())))
 
         message.add_child(XMLElement("body"))
         message.body.add_child(XMLTextElement(content))
