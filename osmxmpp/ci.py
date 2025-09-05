@@ -36,17 +36,24 @@ class XMPPClientInterface:
         raise Exception(f"No {permission} permission")
     
     # Exposed functions
-    def has_permission(self, permission:XMPPPermission) -> bool:
+    def has_permission(self, *permissions) -> bool:
         """
         Checks if the client interface has the given permission.
 
         Args:
-            permission (XMPPPermission): The permission to check.
+            permissions (XMPPPermission): The permissions to check.
 
         Returns:
             bool: True if the client interface has the permission, False otherwise.
         """
-        return (XMPPPermission.ALL in self.__permissions) or (permission in self.__permissions)
+        if XMPPPermission.ALL in self.__permissions:
+            return True
+        
+        for permission in permissions:
+            if permission in self.__permissions:
+                return True
+                
+        return False
 
     def send_xml(self, xml:XMLElement):
         """
