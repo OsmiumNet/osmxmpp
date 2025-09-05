@@ -32,7 +32,7 @@ class _XMPPMessageElement:
         return f"<_XMPPMessageElement {self._xml.to_string()}>"
 
 def _get_xmpp_message_element_or_text(xml: XMLElement) -> _XMPPMessageElement | str:
-    if XML == None:
+    if xml == None:
         return
 
     has_one_child = len(xml.children) == 1
