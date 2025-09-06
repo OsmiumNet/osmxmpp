@@ -290,14 +290,7 @@ class XmppClient:
 
         presence = XmlElement(
             "presence",
-            attributes=[
-                XmlAttribute("to", self.host),
-            ]
-
         )
-
-        if (self.jid):
-            presence.add_attribute(XmlAttribute("from", self.jid))
 
         self._send_xml(presence)
     
