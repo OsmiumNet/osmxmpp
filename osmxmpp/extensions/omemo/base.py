@@ -26,7 +26,7 @@ class OmemoExtension(XmppExtension):
 
     ID = "osmiumnet.omemo"
 
-    # List of required permisions
+    # List of required permissions
     REQUIREMENTS: List[XmppPermission] = [
         XmppPermission.GET_JID,
         XmppPermission.SEND_XML,
