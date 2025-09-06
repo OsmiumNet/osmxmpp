@@ -18,6 +18,11 @@ from ...permission import XmppPermission
 
 from .xml import OmemoXml
 
+"""
+XEP-0384: OMEMO Encryption
+
+https://xmpp.org/extensions/xep-0384.html
+"""
 
 class OmemoExtension(XmppExtension):
     """
