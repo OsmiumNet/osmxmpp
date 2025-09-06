@@ -180,7 +180,7 @@ class OmemoExtension(XmppExtension):
             # Check if this is a devices response
             pubsub = iq.get_child_by_name("pubsub")
             if (not pubsub):
-                return header
+                return
                 
             items = pubsub.get_child_by_name("items")
             if (not items or items.get_attribute_by_name("node").value != "urn:xmpp:omemo:2:devices"):
