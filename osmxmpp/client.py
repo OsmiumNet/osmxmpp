@@ -279,7 +279,17 @@ class XMPPClient:
     def _send_presence(self):
         logger.debug(f"Sending presence...")
 
-        presence = XMLElement("presence")
+        presence = XMLElement(
+            "presence",
+            attributes=[
+                XMLAttribute("to", self.host),
+            ]
+
+        )
+
+        if (self.jid):
+            presence.add_attribute(XMLAttribute("from", self.jid))
+
         self._send_xml(presence)
     
 
