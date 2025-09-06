@@ -20,6 +20,10 @@ from .xml import OmemoXml
 
 
 class OmemoExtension(XmppExtension):
+    """
+    Omemo extension implementation.
+    """
+
     ID = "osmiumnet.omemo"
 
     # List of required permisions
@@ -72,6 +76,16 @@ class OmemoExtension(XmppExtension):
                 self.fetch_bundles(jid)
 
     def fetch_bundles(self, jid):
+        """
+        Fetches the bundles from the given JID.
+
+        Args:
+            jid (str): The JID to fetch the bundles from.
+        
+        Example:
+            >>> client.extensions["osmiumnet.omemo"].fetch_bundles("john@jabber.org")
+        """
+
         xml = OmemoXml.fetch_devices(self.__ci.get_jid(), jid)
         self.__ci.send_xml(xml)
 

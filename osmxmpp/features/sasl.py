@@ -28,7 +28,7 @@ class SaslMechanism(ABC):
         Processes the mechanism.
 
         Args:
-            ci (XmppClientInterface): The client interface given from the SASLFeature.
+            ci (XmppClientInterface): The client interface given from the SaslFeature.
         """
         ...
 

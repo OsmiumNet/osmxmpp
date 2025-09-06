@@ -1,3 +1,4 @@
 osmxml==1.0.1
 osmomemo==1.0.0
 sphinx-autodoc-typehints>=3.2.0
+furo

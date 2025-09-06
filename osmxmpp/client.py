@@ -86,9 +86,21 @@ class XmppClient:
 
     
     def send_message(self, *args, **kwargs):
+        """
+        Sends a message to the given JID.
+
+        Args:
+            jid (str): The JID to send the message to.
+            message (str): The message to send.
+            type (str): The message type. (Default: "chat")
+        
+        Example:
+            >>> client.send_message("john@jabber.org", "Hello, John!", type="chat")
+        """
+
         jid = args[0] if len(args) > 0 else kwargs.get("jid")
         content = args[1] if len(args) > 1 else kwargs.get("message")
-        msg_type = kwargs.get("type")
+        msg_type = kwargs.get("type", "chat")
 
         XmppValidation.validate_jid(jid)
 
@@ -166,6 +178,14 @@ class XmppClient:
 
         Returns:
             Callable: The handler (not changed).
+
+        Example:
+            >>> @client.on_message
+            ... def on_message(message):
+            ...     if message.body is None: #Messages body can be empty
+            ...         return
+            ...
+            ...     print(f"Received message from {message.from_jid}: {message.body}")
         """
         self.__handlers["message"].append(handler)
         return handler

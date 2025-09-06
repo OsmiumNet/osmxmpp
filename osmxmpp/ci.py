@@ -237,11 +237,6 @@ class XmppClientInterface:
 
         Returns:
             Callable: The handler (not changed).
-        
-        Example:
-            >>> @client.on_ready
-            ... def on_ready():
-            ...     print(f"Loggened in as {client.jid}")
         """
         self.__handle_permission(XmppPermission.LISTEN_ON_READY)
         return self.__client.on_ready(handler)
