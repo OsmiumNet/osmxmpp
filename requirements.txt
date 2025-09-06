@@ -1,0 +1,2 @@
+osmomemo==1.0.0
+osmxml==1.0.0
