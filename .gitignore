@@ -3,5 +3,6 @@ venv/
 __pycache__
 
 build/
+._build/
 
 osmxmpp.egg-info/
