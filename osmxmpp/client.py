@@ -61,7 +61,7 @@ class XMPPClient:
     def extensions(self):
         extensions_functions = {}
         for extension_id, extension_ci in self.__extensions.items():
-            extensions_functions[extension_id] = extension_ci.functions
+            extensions_functions[extension_id] = extension_ci.variables
             
         return extensions_functions
 

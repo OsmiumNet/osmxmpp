@@ -27,7 +27,7 @@ class XMPPClientInterface:
         """
 
         self.__client = client
-        self.functions = XMPPClientFunctionInterface(self)
+        self.variables = XMPPVariableInterface(self)
         
         if permissions == XMPPPermission.ALL:
             permissions = [XMPPPermission.ALL]
@@ -356,26 +356,26 @@ class XMPPClientInterface:
     def __repr__(self):
         return f"<XMPPClientInterface of '{repr(self.__client)}'>"
 
-class XMPPClientFunctionInterface:
+class XMPPVariableInterface:
     """
-    XMPP client function interface implementation.
-    Used by Features or Extensions to add functions to client
+    XMPP variable interface implementation.
+    Used by Features or Extensions to expose variables
     """
 
     def __init__(self, ci):
         """
-        Initializes the XMPP client function interface.
+        Initializes the XMPP variable interface.
 
         Args:
             client (XMPPClient): The XMPP client.
         """
 
-        self.__ci = ci
-        self.__functions = {}
+        super().__setattr__("ci", ci)
+        super().__setattr__("variables", {})
     
     def function(self, function:Callable):
         """
-        Registers a function to the client.
+        Registers a function to the variable.
 
         Args:
             function (Callable): The function to register.
@@ -384,14 +384,16 @@ class XMPPClientFunctionInterface:
             Callable: The function (not changed).
         """
 
-        logging.debug(f"Registering function '{function.__name__}' for ''{self.__ci.object.ID}''...")
+        logging.debug(f"Registering function '{function.__name__}' for ''{super().__getattribute__("ci").object.ID}''...")
 
-        self.__functions[function.__name__] = function
+        super().__getattribute__("variables")[function.__name__] = function
         return function
     
     def __getattr__(self, name):
-        if name in self.__functions:
-            return self.__functions[name]
+        if name in super().__getattribute__("variables"):
+            return super().__getattribute__("variables")[name]
         else:
-            raise AttributeError(f"No function named '{name}'")
+            raise AttributeError(f"No variable named '{name}'")
     
+    def __setattr__(self, name, value):
+        super().__getattribute__("variables")[name] = value
