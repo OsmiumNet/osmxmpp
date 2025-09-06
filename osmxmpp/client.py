@@ -3,12 +3,12 @@ import socket, ssl
 
 import uuid
 
-from .validation import XMPPValidation
-from .permission import XMPPPermission
-from .message import XMPPMessage
-from .features import XMPPFeature
-from .extensions import XMPPExtension
-from .ci import XMPPClientInterface
+from .validation import XmppValidation
+from .permission import XmppPermission
+from .message import XmppMessage
+from .features import XmppFeature
+from .extensions import XmppExtension
+from .ci import XmppClientInterface
 
 from typing import Callable, List, Tuple
 
@@ -16,7 +16,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-class XMPPClient:
+class XmppClient:
     """
     XMPP client implementation.
     """
@@ -90,9 +90,9 @@ class XMPPClient:
         content = args[1] if len(args) > 1 else kwargs.get("message")
         msg_type = kwargs.get("type")
 
-        XMPPValidation.validate_jid(jid)
+        XmppValidation.validate_jid(jid)
 
-        message = XMPPMessage()
+        message = XmppMessage()
         message._xml.add_attribute(XMLAttribute("to", jid))
         message._xml.add_attribute(XMLAttribute("type", msg_type))
         message._xml.add_attribute(XMLAttribute("id", str(uuid.uuid4())))
@@ -324,7 +324,7 @@ class XMPPClient:
 
             for element in elements:
                 if element.name == "message":
-                    message = XMPPMessage(element)
+                    message = XmppMessage(element)
                     hooks_result = self._trigger_hooks("on_message", message)
                     if hooks_result is None:
                         continue
@@ -342,39 +342,39 @@ class XMPPClient:
                         continue
                     self._trigger_handlers("iq", hooks_result)
 
-    def connect_feature(self, feature:XMPPFeature, permissions: List[XMPPPermission] | XMPPPermission.ALL) -> None:
+    def connect_feature(self, feature:XmppFeature, permissions: List[XmppPermission] | XmppPermission.ALL) -> None:
         """
         Connects the given feature to the XMPP client.
 
         Args:
-            feature (XMPPFeature): The feature to connect.
-            permissions (List[XMPPPermission] | XMPPPermission.ALL): The permissions to grant.
+            feature (XmppFeature): The feature to connect.
+            permissions (List[XmppPermission] | XmppPermission.ALL): The permissions to grant.
         
         Example:
-            >>> client.connect_feature(BindFeature("osmxmpp"), XMPPPermission.ALL)
+            >>> client.connect_feature(BindFeature("osmxmpp"), XmppPermission.ALL)
         """
         
         logger.debug(f"Connecting feature '{feature.ID}'...")
 
-        XMPPValidation.validate_id(feature.ID)
+        XmppValidation.validate_id(feature.ID)
 
-        feature_ci = XMPPClientInterface(self, feature, permissions)
+        feature_ci = XmppClientInterface(self, feature, permissions)
 
         feature.connect_ci(feature_ci)
         self.__features[feature.ID] = feature_ci
         self.__features_queue.append(feature.ID)
 
-    def connect_features(self, features_with_permissions: List[Tuple[XMPPFeature, List[XMPPPermission] | XMPPPermission.ALL]] ) -> None:
+    def connect_features(self, features_with_permissions: List[Tuple[XmppFeature, List[XmppPermission] | XmppPermission.ALL]] ) -> None:
         """
         Connects the given features to the XMPP client.
 
         Args:
-            features_with_permissions (List[Tuple[XMPPFeature, List[XMPPPermission] | XMPPPermission.ALL]]): The features with permissions to connect
+            features_with_permissions (List[Tuple[XmppFeature, List[XmppPermission] | XmppPermission.ALL]]): The features with permissions to connect
         
         Example:
             >>> client.connect_features([
-            ...     (TLSFeature(), [XMPPPersmision.SEND_XML, XMPPPersmision.RECV_XML])
-            ...     (BindFeature("osmxmpp"), XMPPPermission.ALL)
+            ...     (TLSFeature(), [XmppPersmision.SEND_XML, XmppPersmision.RECV_XML])
+            ...     (BindFeature("osmxmpp"), XmppPermission.ALL)
             ... ])
         """
 
@@ -382,39 +382,39 @@ class XMPPClient:
             self.connect_feature(feature_with_permissions[0], feature_with_permissions[1]) 
 
 
-    def connect_extension(self, extension:XMPPExtension, permissions: List[XMPPPermission] | XMPPPermission.ALL) -> None:
+    def connect_extension(self, extension:XmppExtension, permissions: List[XmppPermission] | XmppPermission.ALL) -> None:
         """
         Connects the given extension to the XMPP client.
 
         Args:
-            extension (XMPPExtension): The extension to connect.
-            permissions (List[XMPPPermission] | XMPPPermission.ALL): The permissions to grant.
+            extension (XmppExtension): The extension to connect.
+            permissions (List[XmppPermission] | XmppPermission.ALL): The permissions to grant.
         
         Example:
-            >>> client.connect_extension(SomeExtension(), XMPPPermission.ALL)
+            >>> client.connect_extension(SomeExtension(), XmppPermission.ALL)
         """
 
         logger.debug(f"Connecting extension '{extension.ID}'...")
 
-        XMPPValidation.validate_id(extension.ID)
+        XmppValidation.validate_id(extension.ID)
 
-        extension_ci = XMPPClientInterface(self, extension, permissions)
+        extension_ci = XmppClientInterface(self, extension, permissions)
         
         extension.connect_ci(extension_ci)
         self.__extensions[extension.ID] = extension_ci
         self.__extensions_queue.append(extension.ID)
     
-    def connect_extensions(self, extensions_with_permissions: List[Tuple[XMPPExtension, List[XMPPPermission] | XMPPPermission.ALL]] ) -> None:
+    def connect_extensions(self, extensions_with_permissions: List[Tuple[XmppExtension, List[XmppPermission] | XmppPermission.ALL]] ) -> None:
         """
         Connects the given extensions to the XMPP client.
 
         Args:
-            extensions_with_permissions (List[Tuple[XMPPExtension, List[XMPPPermission] | XMPPPermission.ALL]]): The extensions with permissions to connect
+            extensions_with_permissions (List[Tuple[XmppExtension, List[XmppPermission] | XmppPermission.ALL]]): The extensions with permissions to connect
         
         Example:
             >>> client.connect_extensions([
-            ...     (SomeExtension(), [XMPPPersmision.SEND_XML, XMPPPersmision.RECV_XML])
-            ...     (SomeOtherExtension(), XMPPPermission.ALL)
+            ...     (SomeExtension(), [XmppPersmision.SEND_XML, XmppPersmision.RECV_XML])
+            ...     (SomeOtherExtension(), XmppPermission.ALL)
             ... ])
         """
 
@@ -494,7 +494,7 @@ class XMPPClient:
         """
 
         if not self.__connected:
-            raise Exception("XMPPClient is not connected")
+            raise Exception("XmppClient is not connected")
 
         self._close_xmpp_stream()
         self.socket.close()
@@ -505,4 +505,4 @@ class XMPPClient:
     
 
     def __repr__(self):
-        return f"<XMPPClient {self.host}:{self.port}>"
+        return f"<XmppClient {self.host}:{self.port}>"

@@ -9,9 +9,9 @@ class ValidationException(Exception):
     pass
 
 
-class XMPPValidation:
+class XmppValidation:
     """
-    OsmXMPP validation methods
+    OsmXmpp validation methods
     """
 
     @staticmethod

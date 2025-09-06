@@ -1,6 +1,6 @@
 import base64
 from osmxml import *
-from .abc import XMPPFeature
+from .abc import XmppFeature
 
 from abc import ABC, abstractmethod
 from typing import List
@@ -9,10 +9,10 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-class SASLException(Exception):
+class SaslException(Exception):
     pass
 
-class SASLMechanism(ABC):
+class SaslMechanism(ABC):
     """
     SASL mechanisms are used to authenticate the user.
 
@@ -28,12 +28,12 @@ class SASLMechanism(ABC):
         Processes the mechanism.
 
         Args:
-            ci (XMPPClientInterface): The client interface given from the SASLFeature.
+            ci (XmppClientInterface): The client interface given from the SASLFeature.
         """
         ...
 
 
-class PLAINMechanism(SASLMechanism):
+class PlainMechanism(SaslMechanism):
     """
     PLAIN SASL mechanism implementation.
 
@@ -68,15 +68,15 @@ class PLAINMechanism(SASLMechanism):
         return data
 
 
-class SASLFeature(XMPPFeature):
+class SaslFeature(XmppFeature):
     """
     SASL feature implementation.
 
     Attributes:
-        mechanisms (List[SASLMechanism]): The SASL mechanisms to use.
+        mechanisms (List[SaslMechanism]): The SASL mechanisms to use.
     
     Raises:
-        SASLException: If authentication fails.
+        SaslException: If authentication fails.
     """
 
     ID = "osmiumnet.sasl"
@@ -84,7 +84,7 @@ class SASLFeature(XMPPFeature):
 
     RECEIVE_NEW_FEATURES = True
 
-    def __init__(self, mechanisms:List[SASLMechanism]):
+    def __init__(self, mechanisms:List[SaslMechanism]):
         self.__mechanisms = mechanisms
     
     def connect_ci(self, ci):
@@ -103,6 +103,6 @@ class SASLFeature(XMPPFeature):
                 break
         
         if recv_data is None or recv_data.name != "success":
-            raise SASLException("SASL authentication failed")
+            raise SaslException("SASL authentication failed")
         
         self.__ci.open_stream()

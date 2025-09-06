@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-class XMPPFeature(ABC):
+class XmppFeature(ABC):
     """
     Features are used to implement specific XMPP stream features.
 
@@ -21,7 +21,7 @@ class XMPPFeature(ABC):
         Connects the feature to the client interface.
 
         Args:
-            ci (XMPPClientInterface): The client interface.
+            ci (XmppClientInterface): The client interface.
         """
         ...
     

@@ -1,4 +1,4 @@
-from .abc import XMPPFeature
+from .abc import XmppFeature
 from osmxml import *
 import socket, ssl
 
@@ -6,7 +6,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-class TLSFeature(XMPPFeature):
+class TlsFeature(XmppFeature):
     """
     TLS feature implementation.
 

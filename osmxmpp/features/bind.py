@@ -1,11 +1,11 @@
-from .abc import XMPPFeature
+from .abc import XmppFeature
 from osmxml import *
 
 import logging
 
 logger = logging.getLogger(__name__)
 
-class BindFeature(XMPPFeature):
+class BindFeature(XmppFeature):
     """
     Bind feature implementation.
 

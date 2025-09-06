@@ -1,7 +1,7 @@
-from .abc import XMPPExtension
+from .abc import XmppExtension
 from .omemo import OmemoExtension 
 
 __ALL__ = [
-    "XMPPExtension",
+    "XmppExtension",
     "OmemoExtension",
 ]

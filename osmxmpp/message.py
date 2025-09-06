@@ -1,6 +1,6 @@
 from osmxml import *
 
-class _XMPPMessageElement:
+class _XmppMessageElement:
     def __init__(self, xml:XMLElement):
         self._xml = xml
 
@@ -21,9 +21,9 @@ class _XMPPMessageElement:
         return self.get_child_by_index(index)
     
     def __repr__(self):
-        return f"<_XMPPMessageElement {self._xml.to_string()}>"
+        return f"<_XmppMessageElement {self._xml.to_string()}>"
 
-def _get_xmpp_message_element_or_text(xml: XMLElement) -> _XMPPMessageElement | str:
+def _get_xmpp_message_element_or_text(xml: XMLElement) -> _XmppMessageElement | str:
     if xml == None:
         return
 
@@ -32,10 +32,10 @@ def _get_xmpp_message_element_or_text(xml: XMLElement) -> _XMPPMessageElement | 
     if has_one_child and hasattr(xml.children[0], "text"):
         return xml.children[0].text
     else:
-        return _XMPPMessageElement(xml)
+        return _XmppMessageElement(xml)
         
 
-class XMPPMessage:
+class XmppMessage:
     """
     XMPP message implementation.
     """
@@ -69,4 +69,4 @@ class XMPPMessage:
         return self.get_child_by_index(index)
     
     def __repr__(self):
-        return f"<XMPPMessage from='{self.from_jid}' to='{self.to_jid}' type='{self.type}'>"
+        return f"<XmppMessage from='{self.from_jid}' to='{self.to_jid}' type='{self.type}'>"

@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-class XMPPExtension(ABC):
+class XmppExtension(ABC):
     """
     Extensions are used to implement specific XMPP extensions & etc.
     They have more wider usecase than features.
@@ -17,7 +17,7 @@ class XMPPExtension(ABC):
         Connects the extension to the client interface.
 
         Args:
-            ci (XMPPClientInterface): The client interface.
+            ci (XmppClientInterface): The client interface.
         """
         ...
     

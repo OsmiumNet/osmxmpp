@@ -1,45 +1,45 @@
 __version__ = "0.1.0"
 __author__ = "osmiumnet"
 
-from .validation import XMPPValidation, ValidationException
+from .validation import XmppValidation, ValidationException
 
-from .permission import XMPPPermission
+from .permission import XmppPermission
 
-from .message import XMPPMessage
+from .message import XmppMessage
 
-from .ci import XMPPClientInterface
-from .client import XMPPClient
+from .ci import XmppClientInterface
+from .client import XmppClient
 
-from .extensions.abc import XMPPExtension
+from .extensions.abc import XmppExtension
 
-from .features.abc import XMPPFeature
-from .features.tls import TLSFeature
-from .features.sasl import SASLException, SASLMechanism, SASLFeature, PLAINMechanism
+from .features.abc import XmppFeature
+from .features.tls import TlsFeature
+from .features.sasl import SaslException, SaslMechanism, SaslFeature, PlainMechanism
 from .features.bind import BindFeature
 
 __all__ = [
-    "XMPPValidation",
+    "XmppValidation",
     "ValidationException",
 
-    "XMPPMessage",
+    "XmppMessage",
 
-    "XMPPPermission",
+    "XmppPermission",
 
-    "XMPPClient",
-    "XMPPClientInterface",
-
-
-    "XMPPExtension",
+    "XmppClient",
+    "XmppClientInterface",
 
 
-    "XMPPFeature",
+    "XmppExtension",
 
-    "TLSFeature",
 
-    "SASLException",
-    "SASLMechanism",
-    "SASLFeature",
-    "PLAINMechanism",
+    "XmppFeature",
+
+    "TlsFeature",
+
+    "SaslException",
+    "SaslMechanism",
+    "SaslFeature",
+    "PlainMechanism",
 
     "BindFeature",
 ]

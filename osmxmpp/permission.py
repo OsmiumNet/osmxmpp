@@ -1,6 +1,6 @@
 from enum import Enum, auto
 
-class XMPPPermission(Enum):
+class XmppPermission(Enum):
     """
     Permissions are used to control what actions Feature or Extension can perform.
     """
@@ -42,4 +42,4 @@ class XMPPPermission(Enum):
         return self.name
     
     def __repr__(self):
-        return f"<XMPPPermission.{self.name}>"
+        return f"<XmppPermission.{self.name}>"

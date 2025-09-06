@@ -12,24 +12,24 @@ from osmxml import XMLParser, XMLElement, XMLAttribute, XMLTextElement
 from osmomemo import Omemo, OmemoBundle, XKeyPair, EdKeyPair
 from osmomemo.storage import OmemoStorage
 
-from ..abc import XMPPExtension
-from ...message import XMPPMessage
-from ...permission import XMPPPermission
+from ..abc import XmppExtension
+from ...message import XmppMessage
+from ...permission import XmppPermission
 
 from .xml import OmemoXml
 
 
-class OmemoExtension(XMPPExtension):
+class OmemoExtension(XmppExtension):
     ID = "osmiumnet.omemo"
 
     # List of required permisions
-    REQUIREMENTS: List[XMPPPermission] = [
-        XMPPPermission.GET_JID,
-        XMPPPermission.SEND_XML,
-        XMPPPermission.LISTEN_ON_READY,
-        XMPPPermission.LISTEN_ON_IQ,
-        XMPPPermission.HOOK_ON_MESSAGE,
-        XMPPPermission.HOOK_SEND_MESSAGE,
+    REQUIREMENTS: List[XmppPermission] = [
+        XmppPermission.GET_JID,
+        XmppPermission.SEND_XML,
+        XmppPermission.LISTEN_ON_READY,
+        XmppPermission.LISTEN_ON_IQ,
+        XmppPermission.HOOK_ON_MESSAGE,
+        XmppPermission.HOOK_SEND_MESSAGE,
     ]
 
     def __init__(self, bundle: OmemoBundle, storage: OmemoStorage):
@@ -54,11 +54,11 @@ class OmemoExtension(XMPPExtension):
 
         # Hooks
         @self.__ci.hook_on_message
-        def hook_on_message(message: XMPPMessage):
+        def hook_on_message(message: XmppMessage):
             return self.__hook_on_message(message)
 
         @self.__ci.hook_send_message
-        def hook_send_message(message: XMPPMessage, *args, **kwargs):
+        def hook_send_message(message: XmppMessage, *args, **kwargs):
             return self.__hook_send_message(message)
 
 
@@ -90,7 +90,7 @@ class OmemoExtension(XMPPExtension):
         self._parse_bundle_response(iq)
         self._parse_devices_response(iq)
 
-    def __hook_on_message(self, message: XMPPMessage):
+    def __hook_on_message(self, message: XmppMessage):
         final_message = None
 
         jid_from = message.from_jid.split("/")[0]
@@ -117,7 +117,7 @@ class OmemoExtension(XMPPExtension):
 
         return final_message if final_message else message 
 
-    def __hook_send_message(self, message: XMPPMessage):
+    def __hook_send_message(self, message: XmppMessage):
         final_message = None
 
         jid_to = message.to_jid.split("/")[0]
@@ -152,11 +152,11 @@ class OmemoExtension(XMPPExtension):
                         payload
             )
 
-            final_message = XMPPMessage(xml)
+            final_message = XmppMessage(xml)
 
         elif (devices is None):
             xml = self._send_init_message(jid_to, body)
-            final_message = XMPPMessage(xml)
+            final_message = XmppMessage(xml)
 
         return final_message if final_message else message 
 

@@ -1,17 +1,17 @@
-from .abc import XMPPFeature
-from .tls import TLSFeature
-from .sasl import SASLException, SASLMechanism, SASLFeature, PLAINMechanism
+from .abc import XmppFeature
+from .tls import TlsFeature
+from .sasl import SaslException, SaslMechanism, SaslFeature, PlainMechanism
 from .bind import BindFeature
 
 __all__ = [
-    "XMPPFeature",
+    "XmppFeature",
 
-    "TLSFeature",
+    "TlsFeature",
 
-    "SASLException",
-    "SASLMechanism",
-    "SASLFeature",
-    "PLAINMechanism",
+    "SaslException",
+    "SaslMechanism",
+    "SaslFeature",
+    "PlainMechanism",
 
     "BindFeature",
 ]

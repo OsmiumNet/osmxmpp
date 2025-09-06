@@ -1,9 +1,9 @@
 from osmxml import *
 import socket
 
-from .validation import XMPPValidation
+from .validation import XmppValidation
 
-from .permission import XMPPPermission
+from .permission import XmppPermission
 
 from typing import List, Callable
 
@@ -11,32 +11,32 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-class XMPPClientInterface:
+class XmppClientInterface:
     """
-    XMPP client interface implementation.
+    Xmpp client interface implementation.
     Used by Features or Extensions to interact with the XMPP client.
     """
 
-    def __init__(self, client, obj, permissions: List[XMPPPermission] | XMPPPermission.ALL):
+    def __init__(self, client, obj, permissions: List[XmppPermission] | XmppPermission.ALL):
         """
-        Initializes the XMPP client interface.
+        Initializes the Xmpp client interface.
 
         Args:
-            client (XMPPClient): The XMPP client.
-            permissions (List[XMPPPermission] | XMPPPermission.ALL): The permissions to grant.
+            client (XmppClient): The XMPP client.
+            permissions (List[XmppPermission] | XmppPermission.ALL): The permissions to grant.
         """
 
         self.__client = client
-        self.variables = XMPPVariableInterface(self)
+        self.variables = XmppVariableInterface(self)
         
-        if permissions == XMPPPermission.ALL:
-            permissions = [XMPPPermission.ALL]
+        if permissions == XmppPermission.ALL:
+            permissions = [XmppPermission.ALL]
 
         self.__permissions = permissions
 
         self.object = obj
     
-    def __handle_permission(self, permission:XMPPPermission):
+    def __handle_permission(self, permission:XmppPermission):
         if self.has_permission(permission):
             return
         
@@ -48,12 +48,12 @@ class XMPPClientInterface:
         Checks if the client interface has the given permission.
 
         Args:
-            permissions (XMPPPermission): The permissions to check.
+            permissions (XmppPermission): The permissions to check.
 
         Returns:
             bool: True if the client interface has the permission, False otherwise.
         """
-        if XMPPPermission.ALL in self.__permissions:
+        if XmppPermission.ALL in self.__permissions:
             return True
         
         for permission in permissions:
@@ -73,7 +73,7 @@ class XMPPClientInterface:
         Returns:
             XMLElement: The XML element sent.
         """
-        self.__handle_permission(XMPPPermission.SEND_XML)
+        self.__handle_permission(XmppPermission.SEND_XML)
         return self.__client._send_xml(xml)
     
     def recv_xml(self) -> XMLElement:
@@ -84,7 +84,7 @@ class XMPPClientInterface:
         Returns:
             XMLElement: The XML element received.
         """
-        self.__handle_permission(XMPPPermission.RECV_XML)
+        self.__handle_permission(XmppPermission.RECV_XML)
         return self.__client._recv_xml()
     
     def get_jid(self, with_resouce:bool = True) -> str:
@@ -98,7 +98,7 @@ class XMPPClientInterface:
         Returns:
             str: The JID of the XMPP client.
         """
-        self.__handle_permission(XMPPPermission.GET_JID)
+        self.__handle_permission(XmppPermission.GET_JID)
 
         if with_resouce:
             return self.__client.jid
@@ -113,7 +113,7 @@ class XMPPClientInterface:
         Returns:
             str: The resource of the XMPP client.
         """
-        self.__handle_permission(XMPPPermission.GET_RESOURCE, XMPPPermission.GET_JID)
+        self.__handle_permission(XmppPermission.GET_RESOURCE, XmppPermission.GET_JID)
         return self.__client.resource
 
     def set_jid(self, jid:str):
@@ -125,9 +125,9 @@ class XMPPClientInterface:
             jid (str): The new JID of the XMPP client.
         """
 
-        XMPPValidation.validate_jid(jid)
+        XmppValidation.validate_jid(jid)
 
-        self.__handle_permission(XMPPPermission.SET_JID)
+        self.__handle_permission(XmppPermission.SET_JID)
         self.__client.jid = jid
         return
 
@@ -140,9 +140,9 @@ class XMPPClientInterface:
             resource (str): The new resource of the XMPP client.
         """
 
-        XMPPValidation.validate_resource(resource)
+        XmppValidation.validate_resource(resource)
 
-        self.__handle_permission(XMPPPermission.SET_RESOURCE)
+        self.__handle_permission(XmppPermission.SET_RESOURCE)
         self.__client.resource = resource
         return
 
@@ -154,7 +154,7 @@ class XMPPClientInterface:
         Returns:
             str: The host of the XMPP client.
         """
-        self.__handle_permission(XMPPPermission.GET_HOST)
+        self.__handle_permission(XmppPermission.GET_HOST)
         return self.__client.host
 
     def get_port(self) -> int:
@@ -165,7 +165,7 @@ class XMPPClientInterface:
         Returns:
             int: The port of the XMPP client.
         """
-        self.__handle_permission(XMPPPermission.GET_PORT)
+        self.__handle_permission(XmppPermission.GET_PORT)
         return self.__client.port
     
     def change_socket(self, socket):
@@ -176,7 +176,7 @@ class XMPPClientInterface:
         Args:
             socket (socket): The new socket of the XMPP client.
         """
-        self.__handle_permission(XMPPPermission.CHANGE_SOCKET)
+        self.__handle_permission(XmppPermission.CHANGE_SOCKET)
         self.__client.socket = socket
         return
     
@@ -188,7 +188,7 @@ class XMPPClientInterface:
         Returns:
             socket: The socket of the XMPP client.
         """
-        self.__handle_permission(XMPPPermission.GET_SOCKET)
+        self.__handle_permission(XmppPermission.GET_SOCKET)
         return self.__client.socket
     
     def open_stream(self):
@@ -196,7 +196,7 @@ class XMPPClientInterface:
         Opens the XMPP stream.
         Requires the OPEN_STREAM permission.
         """
-        self.__handle_permission(XMPPPermission.OPEN_STREAM)
+        self.__handle_permission(XmppPermission.OPEN_STREAM)
         return self.__client._start_xmpp_stream()
     
     def on_connect(self, handler:Callable) -> Callable:
@@ -210,7 +210,7 @@ class XMPPClientInterface:
         Returns:
             Callable: The handler (not changed).
         """
-        self.__handle_permission(XMPPPermission.LISTEN_ON_CONNECT)
+        self.__handle_permission(XmppPermission.LISTEN_ON_CONNECT)
         return self.__client.on_connect(handler)
     
     def on_disconnect(self, handler:Callable) -> Callable:
@@ -224,7 +224,7 @@ class XMPPClientInterface:
         Returns:
             Callable: The handler (not changed).
         """
-        self.__handle_permission(XMPPPermission.LISTEN_ON_DISCONNECT)
+        self.__handle_permission(XmppPermission.LISTEN_ON_DISCONNECT)
         return self.__client.on_disconnect(handler)
     
     def on_ready(self, handler:Callable) -> Callable:
@@ -243,7 +243,7 @@ class XMPPClientInterface:
             ... def on_ready():
             ...     print(f"Loggened in as {client.jid}")
         """
-        self.__handle_permission(XMPPPermission.LISTEN_ON_READY)
+        self.__handle_permission(XmppPermission.LISTEN_ON_READY)
         return self.__client.on_ready(handler)
 
     def on_message(self, handler:Callable) -> Callable:
@@ -257,7 +257,7 @@ class XMPPClientInterface:
         Returns:
             Callable: The handler (not changed).
         """
-        self.__handle_permission(XMPPPermission.LISTEN_ON_MESSAGE)
+        self.__handle_permission(XmppPermission.LISTEN_ON_MESSAGE)
         return self.__client.on_message(handler)
     
     def on_presence(self, handler:Callable) -> Callable:
@@ -271,7 +271,7 @@ class XMPPClientInterface:
         Returns:
             Callable: The handler (not changed).
         """
-        self.__handle_permission(XMPPPermission.LISTEN_ON_PRESENCE)
+        self.__handle_permission(XmppPermission.LISTEN_ON_PRESENCE)
         return self.__client.on_presence(handler)
     
     def on_iq(self, handler:Callable) -> Callable:
@@ -285,7 +285,7 @@ class XMPPClientInterface:
         Returns:
             Callable: The handler (not changed).
         """
-        self.__handle_permission(XMPPPermission.LISTEN_ON_IQ)
+        self.__handle_permission(XmppPermission.LISTEN_ON_IQ)
         return self.__client.on_iq(handler)
     
     def hook_on_message(self, hook:Callable) -> Callable:
@@ -299,7 +299,7 @@ class XMPPClientInterface:
         Returns:
             Callable: The hook (not changed).
         """
-        self.__handle_permission(XMPPPermission.HOOK_ON_MESSAGE)
+        self.__handle_permission(XmppPermission.HOOK_ON_MESSAGE)
         return self.__client.hook_on_message(hook)
     
     def hook_on_presence(self, hook:Callable) -> Callable:
@@ -313,7 +313,7 @@ class XMPPClientInterface:
         Returns:
             Callable: The hook (not changed).
         """
-        self.__handle_permission(XMPPPermission.HOOK_ON_PRESENCE)
+        self.__handle_permission(XmppPermission.HOOK_ON_PRESENCE)
         return self.__client.hook_on_presence(hook)
     
     def hook_on_iq(self, hook:Callable) -> Callable:
@@ -327,7 +327,7 @@ class XMPPClientInterface:
         Returns:
             Callable: The hook (not changed).
         """
-        self.__handle_permission(XMPPPermission.HOOK_ON_IQ)
+        self.__handle_permission(XmppPermission.HOOK_ON_IQ)
         return self.__client.hook_on_iq(hook)
     
     def hook_send_message(self, hook:Callable) -> Callable:
@@ -341,7 +341,7 @@ class XMPPClientInterface:
         Returns:
             Callable: The hook (not changed).
         """
-        self.__handle_permission(XMPPPermission.HOOK_SEND_MESSAGE)
+        self.__handle_permission(XmppPermission.HOOK_SEND_MESSAGE)
         return self.__client.hook_send_message(hook)
     
     def disconnect(self):
@@ -349,16 +349,16 @@ class XMPPClientInterface:
         Disconnects from the XMPP server.
         Requires the DISCONNECT permission.
         """
-        self.__handle_permission(XMPPPermission.DISCONNECT)
+        self.__handle_permission(XmppPermission.DISCONNECT)
         return self.__client.disconnect()
     
 
     def __repr__(self):
-        return f"<XMPPClientInterface of '{repr(self.__client)}'>"
+        return f"<XmppClientInterface of '{repr(self.__client)}'>"
 
-class XMPPVariableInterface:
+class XmppVariableInterface:
     """
-    XMPP variable interface implementation.
+    Xmpp variable interface implementation.
     Used by Features or Extensions to expose variables
     """
 
@@ -367,7 +367,7 @@ class XMPPVariableInterface:
         Initializes the XMPP variable interface.
 
         Args:
-            client (XMPPClient): The XMPP client.
+            client (XmppClient): The XMPP client.
         """
 
         super().__setattr__("ci", ci)
