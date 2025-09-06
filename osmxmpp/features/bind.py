@@ -25,27 +25,27 @@ class BindFeature(XmppFeature):
         self.__ci = ci
     
     def process(self, element):
-        bind_xml = XMLElement(
+        bind_xml = XmlElement(
             "iq",
 
             attributes = [
-                XMLAttribute("type", "set"),
-                XMLAttribute("id", "bind_1"),
+                XmlAttribute("type", "set"),
+                XmlAttribute("id", "bind_1"),
             ],
 
             children = [
-                XMLElement(
+                XmlElement(
                     "bind",
 
                     attributes = [
-                        XMLAttribute("xmlns", "urn:ietf:params:xml:ns:xmpp-bind")
+                        XmlAttribute("xmlns", "urn:ietf:params:xml:ns:xmpp-bind")
                     ],
 
                     children = [
-                        XMLElement(
+                        XmlElement(
                             "resource",
                             children = [
-                                XMLTextElement(self.__resource)
+                                XmlTextElement(self.__resource)
                             ]
                         )
                     ]

@@ -1,7 +1,7 @@
 from osmxml import *
 
 class _XmppMessageElement:
-    def __init__(self, xml:XMLElement):
+    def __init__(self, xml:XmlElement):
         self._xml = xml
 
     def get_attribute_by_index(self, index:int):
@@ -23,7 +23,7 @@ class _XmppMessageElement:
     def __repr__(self):
         return f"<_XmppMessageElement {self._xml.to_string()}>"
 
-def _get_xmpp_message_element_or_text(xml: XMLElement) -> _XmppMessageElement | str:
+def _get_xmpp_message_element_or_text(xml: XmlElement) -> _XmppMessageElement | str:
     if xml == None:
         return
 
@@ -40,11 +40,11 @@ class XmppMessage:
     XMPP message implementation.
     """
 
-    def __init__(self, xml: XMLElement=None):
+    def __init__(self, xml: XmlElement=None):
         if xml:
             self._xml = xml
         else:
-            self._xml = XMLElement("message")
+            self._xml = XmlElement("message")
 
     def get_attribute_by_index(self, index:int):
         return self._xml.get_attribute_by_index(index)

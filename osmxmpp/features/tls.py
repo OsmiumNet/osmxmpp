@@ -35,11 +35,11 @@ class TlsFeature(XmppFeature):
         self.__ci = ci
 
     def process(self, element):
-        tls_handshake = XMLElement(
+        tls_handshake = XmlElement(
             "starttls",
 
             attributes = [
-                XMLAttribute("xmlns", "urn:ietf:params:xml:ns:xmpp-tls")
+                XmlAttribute("xmlns", "urn:ietf:params:xml:ns:xmpp-tls")
             ]
         )
 

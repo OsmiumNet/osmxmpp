@@ -31,6 +31,6 @@ class XmppFeature(ABC):
         Processes the feature.
 
         Args:
-            element (XMLElement): The XML element to process.
+            element (XmlElement): The XML element to process.
         """
         ...

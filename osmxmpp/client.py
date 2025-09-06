@@ -93,12 +93,12 @@ class XmppClient:
         XmppValidation.validate_jid(jid)
 
         message = XmppMessage()
-        message._xml.add_attribute(XMLAttribute("to", jid))
-        message._xml.add_attribute(XMLAttribute("type", msg_type))
-        message._xml.add_attribute(XMLAttribute("id", str(uuid.uuid4())))
+        message._xml.add_attribute(XmlAttribute("to", jid))
+        message._xml.add_attribute(XmlAttribute("type", msg_type))
+        message._xml.add_attribute(XmlAttribute("id", str(uuid.uuid4())))
 
-        message._xml.add_child(XMLElement("body"))
-        message.body._xml.add_child(XMLTextElement(content))
+        message._xml.add_child(XmlElement("body"))
+        message.body._xml.add_child(XmlTextElement(content))
 
         for hook in self.__hooks["send_message"]:
             message = hook(message, *args, **kwargs)
@@ -256,24 +256,24 @@ class XmppClient:
         return hook
 
 
-    def _recv_xml(self) -> XMLElement:
+    def _recv_xml(self) -> XmlElement:
         data = self.socket.recv(4096)
-        return XMLParser.parse_elements(data.decode("utf-8"))[0]
+        return XmlParser.parse_elements(data.decode("utf-8"))[0]
     
-    def _send_xml(self, xml:XMLElement):
+    def _send_xml(self, xml:XmlElement):
         self.socket.sendall(xml.to_string().encode("utf-8"))
 
 
     def _start_xmpp_stream(self):
         logger.debug(f"Starting XMPP stream...")
 
-        stream_start = XMLElement(
+        stream_start = XmlElement(
             "stream:stream", 
             attributes = [
-                XMLAttribute("xmlns", "jabber:client"), 
-                XMLAttribute("xmlns:stream", "http://etherx.jabber.org/streams"), 
-                XMLAttribute("version", "1.0"), 
-                XMLAttribute("to", self.host)
+                XmlAttribute("xmlns", "jabber:client"), 
+                XmlAttribute("xmlns:stream", "http://etherx.jabber.org/streams"), 
+                XmlAttribute("version", "1.0"), 
+                XmlAttribute("to", self.host)
             ],
             is_closed=False
         )
@@ -288,16 +288,16 @@ class XmppClient:
     def _send_presence(self):
         logger.debug(f"Sending presence...")
 
-        presence = XMLElement(
+        presence = XmlElement(
             "presence",
             attributes=[
-                XMLAttribute("to", self.host),
+                XmlAttribute("to", self.host),
             ]
 
         )
 
         if (self.jid):
-            presence.add_attribute(XMLAttribute("from", self.jid))
+            presence.add_attribute(XmlAttribute("from", self.jid))
 
         self._send_xml(presence)
     
@@ -316,7 +316,7 @@ class XmppClient:
             buffer += data.decode("utf-8")
 
             try:
-                elements = XMLParser.parse_elements(buffer)
+                elements = XmlParser.parse_elements(buffer)
                 buffer = ""
             except Exception:
                 # Incomplete stanza

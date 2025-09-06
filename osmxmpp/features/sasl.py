@@ -49,16 +49,16 @@ class PlainMechanism(SaslMechanism):
         self.__auth_string = base64.b64encode(self.__auth_string.encode("utf-8")).decode()
 
     def process(self, ci):
-        auth_xml = XMLElement(
+        auth_xml = XmlElement(
             "auth",
 
             attributes = [
-                XMLAttribute("xmlns", "urn:ietf:params:xml:ns:xmpp-sasl"),
-                XMLAttribute("mechanism", "PLAIN"),
+                XmlAttribute("xmlns", "urn:ietf:params:xml:ns:xmpp-sasl"),
+                XmlAttribute("mechanism", "PLAIN"),
             ],
 
             children = [
-                XMLTextElement(self.__auth_string),
+                XmlTextElement(self.__auth_string),
             ]
         )
 

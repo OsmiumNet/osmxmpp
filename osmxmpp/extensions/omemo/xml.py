@@ -2,51 +2,51 @@ import uuid
 
 from typing import List
 
-from osmxml import XMLParser
-from osmxml import XMLElement
-from osmxml import XMLAttribute
-from osmxml import XMLTextElement
+from osmxml import XmlParser
+from osmxml import XmlElement
+from osmxml import XmlAttribute
+from osmxml import XmlTextElement
 
 from osmomemo import OmemoBundle
 
 class OmemoXml:
     @staticmethod
-    def send_presence(jid_to: str) -> XMLElement:
+    def send_presence(jid_to: str) -> XmlElement:
         xml_str = f"""
         <presence to='{jid_to}'>
           <show>chat</show>
           <status>Available for OMEMO</status>
         </presence>
         """
-        return XMLParser.parse_elements(xml_str)[0]
+        return XmlParser.parse_elements(xml_str)[0]
 
     @staticmethod
-    def send_subscribe(jid_to: str) -> XMLElement:
+    def send_subscribe(jid_to: str) -> XmlElement:
         xml_str = f"""
         <presence type='subscribe' to='{jid_to}'>
           <status>OMEMO setup - requesting subscription</status>
         </presence>
         """
-        return XMLParser.parse_elements(xml_str)[0]
+        return XmlParser.parse_elements(xml_str)[0]
 
     @staticmethod
-    def send_subscribed(jid_to: str) -> XMLElement:
+    def send_subscribed(jid_to: str) -> XmlElement:
         xml_str = f"""
         <presence type='subscribed' to='{jid_to}'/>
         """
-        return XMLParser.parse_elements(xml_str)[0]
+        return XmlParser.parse_elements(xml_str)[0]
 
     @staticmethod
-    def check_node_exists(jid: str) -> XMLElement:
+    def check_node_exists(jid: str) -> XmlElement:
         xml_str = f"""
         <iq type='get' id='{OmemoXml.make_id()}' to='{jid}'>
           <query xmlns='http://jabber.org/protocol/disco#items' node='urn:xmpp:omemo:2:devices'/>
         </iq>
         """
-        return XMLParser.parse_elements(xml_str)[0]
+        return XmlParser.parse_elements(xml_str)[0]
 
     @staticmethod
-    def publish_device_list_setup(jid: str) -> XMLElement:
+    def publish_device_list_setup(jid: str) -> XmlElement:
         xml_str = f"""
         <iq type='set' id='{OmemoXml.make_id()}' to='{jid}'>
           <pubsub xmlns='http://jabber.org/protocol/pubsub'>
@@ -64,10 +64,10 @@ class OmemoXml:
           </pubsub>
         </iq>
         """
-        return XMLParser.parse_elements(xml_str)[0]
+        return XmlParser.parse_elements(xml_str)[0]
 
     @staticmethod
-    def publish_device(jid: str, device: int, lable: str = "OsmiumNet") -> XMLElement:
+    def publish_device(jid: str, device: int, lable: str = "OsmiumNet") -> XmlElement:
         xml_str = f"""
         <iq to='{jid}' type='set' id='{OmemoXml.make_id()}' >
           <pubsub xmlns='http://jabber.org/protocol/pubsub'>
@@ -82,25 +82,25 @@ class OmemoXml:
         </iq>
         """
                 
-        return XMLParser.parse_elements(xml_str)[0]
+        return XmlParser.parse_elements(xml_str)[0]
 
     @staticmethod
-    def publish_bundle_information(jid: str, bundle: OmemoBundle) -> XMLElement:
+    def publish_bundle_information(jid: str, bundle: OmemoBundle) -> XmlElement:
         device_id = bundle.get_device_id()
         ik = bundle.get_indentity().get_base64_public_key() 
         spk = bundle.get_prekey().get_base64_public_key()
         spk_sign = bundle.get_prekey_signature()
 
-        opks_xml = XMLElement(
+        opks_xml = XmlElement(
             name="prekeys",
             children=[
-                XMLElement(
+                XmlElement(
                     name="pk",
                     attributes=[
-                        XMLAttribute("id", str(i))
+                        XmlAttribute("id", str(i))
                     ],
                     children=[
-                        XMLTextElement(opk.get_base64_public_key())
+                        XmlTextElement(opk.get_base64_public_key())
                     ]
                 ) for i, opk in bundle.get_onetime_prekeys().items()
             ]
@@ -124,10 +124,10 @@ class OmemoXml:
           </pubsub>
         </iq>
         """
-        return XMLParser.parse_elements(xml_str)[0]
+        return XmlParser.parse_elements(xml_str)[0]
 
     @staticmethod
-    def fetch_devices(jid: str, jid_to: str) -> XMLElement:
+    def fetch_devices(jid: str, jid_to: str) -> XmlElement:
         xml_str = f"""
         <iq type='get'
             from='{jid}'
@@ -138,10 +138,10 @@ class OmemoXml:
           </pubsub>
         </iq>
         """
-        return XMLParser.parse_elements(xml_str)[0]
+        return XmlParser.parse_elements(xml_str)[0]
 
     @staticmethod
-    def fetch_bundles(jid: str, jid_to: str, device_to: int) -> XMLElement:
+    def fetch_bundles(jid: str, jid_to: str, device_to: int) -> XmlElement:
         xml_str = f"""
         <iq type='get' from='{jid}' to='{jid_to}' id='{OmemoXml.make_id()}'>
           <pubsub xmlns='http://jabber.org/protocol/pubsub'>
@@ -151,7 +151,7 @@ class OmemoXml:
           </pubsub>
         </iq>
         """
-        return XMLParser.parse_elements(xml_str)[0]
+        return XmlParser.parse_elements(xml_str)[0]
 
     @staticmethod
     def send_init_message(
@@ -160,7 +160,7 @@ class OmemoXml:
                 device: int, 
                 device_to: int,
                 wrapped: str,
-            ) -> XMLElement:
+            ) -> XmlElement:
         xml_str = f"""
         <message from="{jid}" to="{jid_to}" type="chat" id="{OmemoXml.make_id()}">
             <encrypted xmlns="urn:xmpp:omemo:2">
@@ -172,7 +172,7 @@ class OmemoXml:
                     </keys>
                 </header>
                 <payload>
-                     {XMLTextElement("ciphertext-of-sce-envelope").to_string()}
+                     {XmlTextElement("ciphertext-of-sce-envelope").to_string()}
                 </payload>
             </encrypted>
             <body>
@@ -180,16 +180,16 @@ class OmemoXml:
             </body>
         </message>
         """
-        return XMLParser.parse_elements(xml_str)[0]
+        return XmlParser.parse_elements(xml_str)[0]
 
     @staticmethod
     def send_message(
                 jid: str, 
                 jid_to: str, 
                 device: int, 
-                keys: List[XMLElement],
+                keys: List[XmlElement],
                 payload: str,
-            ) -> XMLElement:
+            ) -> XmlElement:
         xml_str_keys = "\n".join([nkey.to_string(raw=False) for nkey in keys]) 
         xml_str = f"""
         <message from="{jid}" to="{jid_to}" type="chat" id="{OmemoXml.make_id()}">
@@ -206,7 +206,7 @@ class OmemoXml:
             </body>
         </message>
         """
-        return XMLParser.parse_elements(xml_str)[0]
+        return XmlParser.parse_elements(xml_str)[0]
 
     @staticmethod
     def make_id():

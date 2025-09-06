@@ -7,7 +7,7 @@ import secrets
 
 from typing import Callable, List, Tuple, Dict
 
-from osmxml import XMLParser, XMLElement, XMLAttribute, XMLTextElement
+from osmxml import XmlParser, XmlElement, XmlAttribute, XmlTextElement
 
 from osmomemo import Omemo, OmemoBundle, XKeyPair, EdKeyPair
 from osmomemo.storage import OmemoStorage
@@ -125,7 +125,7 @@ class OmemoExtension(XmppExtension):
 
         devices = self.__omemo.get_device_list(jid_to)
         if (type(devices) == list):
-            xml_keys = XMLElement("keys", [XMLAttribute("jid", jid_to)])
+            xml_keys = XmlElement("keys", [XmlAttribute("jid", jid_to)])
             payload = ""
             for device in devices:
                 wrapped_key, payload_bytes = self.__omemo.send_message(
@@ -138,10 +138,10 @@ class OmemoExtension(XmppExtension):
                 payload = base64.b64encode(payload_bytes).decode("utf-8")
 
                 xml_keys.add_child(
-                            XMLElement(
+                            XmlElement(
                                 "key", 
-                                [XMLAttribute("rid", device)],
-                                [XMLTextElement(wrapped)])
+                                [XmlAttribute("rid", device)],
+                                [XmlTextElement(wrapped)])
                 )
 
             xml = OmemoXml.send_message(

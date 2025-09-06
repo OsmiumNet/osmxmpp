@@ -62,27 +62,27 @@ class XmppClientInterface:
 
         return False
 
-    def send_xml(self, xml:XMLElement):
+    def send_xml(self, xml:XmlElement):
         """
         Sends an XML element to the XMPP client.
         Requires the SEND_XML permission.
 
         Args:
-            xml (XMLElement): The XML element to send.
+            xml (XmlElement): The XML element to send.
 
         Returns:
-            XMLElement: The XML element sent.
+            XmlElement: The XML element sent.
         """
         self.__handle_permission(XmppPermission.SEND_XML)
         return self.__client._send_xml(xml)
     
-    def recv_xml(self) -> XMLElement:
+    def recv_xml(self) -> XmlElement:
         """
         Receives an XML element from the XMPP client.
         Requires the RECV_XML permission.
 
         Returns:
-            XMLElement: The XML element received.
+            XmlElement: The XML element received.
         """
         self.__handle_permission(XmppPermission.RECV_XML)
         return self.__client._recv_xml()
