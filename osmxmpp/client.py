@@ -57,9 +57,18 @@ class XMPPClient:
         self.__extensions_queue = []
 
 
+    @property    
+    def extensions(self):
+        extensions_functions = {}
+        for extension_id, extension_ci in self.__extensions.items():
+            extensions_functions[extension_id] = extension_ci.functions
+            
+        return extensions_functions
+
+
     @property
     def connected(self):
-        return self.__connected
+        return self.__connecte
     
 
     def _trigger_handlers(self, event:str, *args, **kwargs):
@@ -349,8 +358,10 @@ class XMPPClient:
 
         XMPPValidation.validate_id(feature.ID)
 
-        feature.connect_ci(XMPPClientInterface(self, permissions))
-        self.__features[feature.ID] = feature
+        feature_ci = XMPPClientInterface(self, feature, permissions)
+
+        feature.connect_ci(feature_ci)
+        self.__features[feature.ID] = feature_ci
         self.__features_queue.append(feature.ID)
 
     def connect_features(self, features_with_permissions: List[Tuple[XMPPFeature, List[XMPPPermission] | XMPPPermission.ALL]] ) -> None:
@@ -386,9 +397,11 @@ class XMPPClient:
         logger.debug(f"Connecting extension '{extension.ID}'...")
 
         XMPPValidation.validate_id(extension.ID)
+
+        extension_ci = XMPPClientInterface(self, extension, permissions)
         
-        extension.connect_ci(XMPPClientInterface(self, permissions))
-        self.__extensions[extension.ID] = extension
+        extension.connect_ci(extension_ci)
+        self.__extensions[extension.ID] = extension_ci
         self.__extensions_queue.append(extension.ID)
     
     def connect_extensions(self, extensions_with_permissions: List[Tuple[XMPPExtension, List[XMPPPermission] | XMPPPermission.ALL]] ) -> None:
@@ -421,7 +434,7 @@ class XMPPClient:
             logger.info(f"Connected to {self.host}:{self.port}")
 
             for extension_id in self.__extensions_queue:
-                extension = self.__extensions[extension_id]
+                extension = self.__extensions[extension_id].object
 
                 logger.debug(f"Processing extension '{extension.ID}'...")
 
@@ -453,7 +466,7 @@ class XMPPClient:
                     
                 processed_feature = None
                 for feature_id in self.__features_queue:
-                    feature = self.__features[feature_id]
+                    feature = self.__features[feature_id].object
 
                     feature_xml = features_xml.get_child_by_name(feature.TAG)
                     if feature_xml:

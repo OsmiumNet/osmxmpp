@@ -7,13 +7,17 @@ from .permission import XMPPPermission
 
 from typing import List, Callable
 
+import logging
+
+logger = logging.getLogger(__name__)
+
 class XMPPClientInterface:
     """
     XMPP client interface implementation.
     Used by Features or Extensions to interact with the XMPP client.
     """
 
-    def __init__(self, client, permissions: List[XMPPPermission] | XMPPPermission.ALL):
+    def __init__(self, client, obj, permissions: List[XMPPPermission] | XMPPPermission.ALL):
         """
         Initializes the XMPP client interface.
 
@@ -23,11 +27,14 @@ class XMPPClientInterface:
         """
 
         self.__client = client
+        self.functions = XMPPClientFunctionInterface(self)
         
         if permissions == XMPPPermission.ALL:
             permissions = [XMPPPermission.ALL]
 
         self.__permissions = permissions
+
+        self.object = obj
     
     def __handle_permission(self, permission:XMPPPermission):
         if self.has_permission(permission):
@@ -348,3 +355,43 @@ class XMPPClientInterface:
 
     def __repr__(self):
         return f"<XMPPClientInterface of '{repr(self.__client)}'>"
+
+class XMPPClientFunctionInterface:
+    """
+    XMPP client function interface implementation.
+    Used by Features or Extensions to add functions to client
+    """
+
+    def __init__(self, ci):
+        """
+        Initializes the XMPP client function interface.
+
+        Args:
+            client (XMPPClient): The XMPP client.
+        """
+
+        self.__ci = ci
+        self.__functions = {}
+    
+    def function(self, function:Callable):
+        """
+        Registers a function to the client.
+
+        Args:
+            function (Callable): The function to register.
+        
+        Returns:
+            Callable: The function (not changed).
+        """
+
+        logging.debug(f"Registering function '{function.__name__}' for ''{self.__ci.object.ID}''...")
+
+        self.__functions[function.__name__] = function
+        return function
+    
+    def __getattr__(self, name):
+        if name in self.__functions:
+            return self.__functions[name]
+        else:
+            raise AttributeError(f"No function named '{name}'")
+    
