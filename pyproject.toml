@@ -5,6 +5,6 @@ description = "Python XMPP library"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
-    "osmxml==1.0.0",
+    "osmxml==1.0.1",
     "osmomemo==1.0.0",
 ]

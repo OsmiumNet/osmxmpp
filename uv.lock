@@ -99,11 +99,11 @@ wheels = [
 
 [[package]]
 name = "osmxml"
-version = "1.0.0"
+version = "1.0.1"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/99/39/aa08383d53dcafb2d5aa8b689e23e7cdf6867712fdbcddd0ce948fbbfd82/osmxml-1.0.0.tar.gz", hash = "sha256:77d96effe671af3b58296254517622b1290df6148d6ab8884c7973e85bb655ad", size = 5624, upload-time = "2025-08-29T12:00:43.438Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/67/46/a4d3f8cd961d2f38ce996e5cadae517cc4233be91fe4bb7bac65fb43a775/osmxml-1.0.1.tar.gz", hash = "sha256:840f16ec20cda1052b45fbc58ba365fce45400f8f2790a9eccf5c3293f8f1f9e", size = 5648, upload-time = "2025-09-06T13:48:33.137Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/ea/13/8e8f1e33df808f2ce33608c38861768f264f11673dc9f4160cb62f9cec76/osmxml-1.0.0-py3-none-any.whl", hash = "sha256:b9690e8cc91651b027c4d607457491b95a65aff2471b3c2fc98214f8070d5bd7", size = 5116, upload-time = "2025-08-29T12:00:42.148Z" },
+    { url = "https://files.pythonhosted.org/packages/24/6c/8ac66373b832bac49df03d48259ae91d92560acb1127c9fcc9a012cf7f38/osmxml-1.0.1-py3-none-any.whl", hash = "sha256:f9bc3bf4f70fd4a5349796453a0dc319f239d3537f4f3a9546487d05ba83f324", size = 5107, upload-time = "2025-09-06T13:48:31.797Z" },
 ]
 
 [[package]]
@@ -118,7 +118,7 @@ dependencies = [
 [package.metadata]
 requires-dist = [
     { name = "osmomemo", specifier = "==1.0.0" },
-    { name = "osmxml", specifier = "==1.0.0" },
+    { name = "osmxml", specifier = "==1.0.1" },
 ]
 
 [[package]]
