@@ -22,11 +22,8 @@ class XMPPExtension(ABC):
         ...
     
     @abstractmethod
-    def process(self, element) -> None:
+    def process(self) -> None:
         """
         Processes the extension.
-
-        Args:
-            element (XMLElement): The XML element to process.
         """
         ...
