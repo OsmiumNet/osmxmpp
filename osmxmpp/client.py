@@ -414,8 +414,11 @@ class XmppClient:
         extension_ci = XmppClientInterface(self, extension, permissions)
         
         extension.connect_ci(extension_ci)
+
         self.__extensions[extension.ID] = extension_ci
         self.__extensions_queue.append(extension.ID)
+
+        self.__extensions[extension.ID].object.process()
     
     def connect_extensions(self, extensions_with_permissions: List[Tuple[XmppExtension, List[XmppPermission] | XmppPermission.ALL]] ) -> None:
         """
@@ -445,13 +448,6 @@ class XmppClient:
             self.__connected = True
 
             logger.info(f"Connected to {self.host}:{self.port}")
-
-            for extension_id in self.__extensions_queue:
-                extension = self.__extensions[extension_id].object
-
-                logger.debug(f"Processing extension '{extension.ID}'...")
-
-                extension.process()
 
             self._trigger_handlers("connected")
             
