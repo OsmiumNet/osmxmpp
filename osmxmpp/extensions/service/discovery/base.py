@@ -27,6 +27,7 @@ class ServiceDiscoveryExtension(XmppExtension):
         self.__ci = ci
 
     def process(self):
+        # Variables
         @self.__ci.variables.function
         def discover():
             xml = DiscoveryXml.discover()

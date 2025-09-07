@@ -46,7 +46,7 @@ class OmemoExtension(XmppExtension):
         self.__ci = ci
 
     def process(self):
-        # Listens
+        # Listeners
         @self.__ci.on_ready
         def on_ready():
             self.__on_ready()
