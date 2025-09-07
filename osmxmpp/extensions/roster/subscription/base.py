@@ -14,8 +14,7 @@ class SubscriptionExtension(XmppExtension):
     XEP-0379: Pre-Authenticated Roster Subscription implementation.
     """
 
-    # TODO: change validator and id
-    ID = "osmiumnet.rostersubscription"
+    ID = "osmiumnet.roster.subscription"
 
     # List of required permisions
     REQUIREMENTS: List[XmppPermission] = [

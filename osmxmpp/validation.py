@@ -1,6 +1,6 @@
 import re
 
-osmxmpp_id_regex = re.compile(r'^[A-Za-z0-9]+\.[A-Za-z0-9]+$')
+osmxmpp_id_regex = re.compile(r'^[A-Za-z0-9]+(?:\.[A-Za-z0-9]+)+$')
 
 xmpp_jid_regex = re.compile(r'^(?:([a-zA-Z0-9._%+-]+)@)?([a-zA-Z0-9.-]+\.[a-zA-Z]{2,})(?:/(.+))?$')
 xmpp_resource_regex = re.compile(r'^[^\s/]+$')

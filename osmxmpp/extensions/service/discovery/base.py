@@ -12,8 +12,7 @@ class ServiceDiscoveryExtension(XmppExtension):
     XEP-0030: Service Discovery implementation.
     """
 
-    # TODO: change validator to accept "osmiumnet.service.discovery"  
-    ID = "osmiumnet.servicediscovery"
+    ID = "osmiumnet.service.discovery"
 
     # List of required permissions
     REQUIREMENTS: List[XmppPermission] = [
