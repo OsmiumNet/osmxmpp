@@ -117,7 +117,6 @@ class SubscriptionExtension(XmppExtension):
         # If jid from ask list is in ensure list, it sends subscribed to it
         for ask_child in ask_children_list:
             if (ask_child in self.__ensure_list):
-                print(ask_child)
                 # Send subscribed
                 xml = SubscriptionXml.send_subscribed(ensure_jid)
                 self.__ci.send_xml(xml)
