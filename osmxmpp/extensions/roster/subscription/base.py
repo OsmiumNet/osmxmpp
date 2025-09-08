@@ -44,7 +44,7 @@ class SubscriptionExtension(XmppExtension):
         # Hooks
         @self.__ci.hook_on_iq
         def hook_on_iq(iq: XmlElement):
-            self.__hook_on_iq(iq)
+            return self.__hook_on_iq(iq)
 
         # Variables
         @self.__ci.variables.function
