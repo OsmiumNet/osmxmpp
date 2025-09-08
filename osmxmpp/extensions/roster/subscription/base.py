@@ -120,5 +120,10 @@ class SubscriptionExtension(XmppExtension):
                 # Send subscribed
                 xml = SubscriptionXml.send_subscribed(ensure_jid)
                 self.__ci.send_xml(xml)
+
+        # Trigger event
+        handlers = self.__handlers["on_check_subscriptions"] 
+        for handler in handlers:
+            handler(iq)
         
         return True
