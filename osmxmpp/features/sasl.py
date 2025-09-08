@@ -87,7 +87,7 @@ class SaslFeature(XmppFeature):
     def __init__(self, mechanisms:List[SaslMechanism]):
         self.__mechanisms = mechanisms
     
-    def connect_ci(self, ci):
+    def _connect_ci(self, ci):
         self.__ci = ci
     
     def process(self, element):

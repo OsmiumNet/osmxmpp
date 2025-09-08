@@ -16,7 +16,7 @@ class XmppFeature(ABC):
     RECEIVE_NEW_FEATURES = None
     
     @abstractmethod
-    def connect_ci(self, ci) -> None:
+    def _connect_ci(self, ci) -> None:
         """
         Connects the feature to the client interface.
 

@@ -42,7 +42,7 @@ class OmemoExtension(XmppExtension):
 
         self.__contact_bundles = {}
 
-    def connect_ci(self, ci):
+    def _connect_ci(self, ci):
         self.__ci = ci
 
     def process(self):

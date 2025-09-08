@@ -32,7 +32,7 @@ class SubscriptionExtension(XmppExtension):
             "on_check_subscriptions": [],
         }
      
-    def connect_ci(self, ci):
+    def _connect_ci(self, ci):
         self.__ci = ci
 
     def process(self):

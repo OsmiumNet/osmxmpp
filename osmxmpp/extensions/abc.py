@@ -12,7 +12,7 @@ class XmppExtension(ABC):
     ID = None
     
     @abstractmethod
-    def connect_ci(self, ci) -> None:
+    def _connect_ci(self, ci) -> None:
         """
         Connects the extension to the client interface.
 

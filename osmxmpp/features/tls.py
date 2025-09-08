@@ -31,7 +31,7 @@ class TlsFeature(XmppFeature):
             logger.debug(f"Loading verify locations...")
             self.__ssl_context.load_verify_locations(verify_locations)
     
-    def connect_ci(self, ci):
+    def _connect_ci(self, ci):
         self.__ci = ci
 
     def process(self, element):

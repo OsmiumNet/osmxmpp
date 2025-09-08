@@ -21,7 +21,7 @@ class BindFeature(XmppFeature):
     def __init__(self, resource:str):
         self.__resource = resource
     
-    def connect_ci(self, ci):
+    def _connect_ci(self, ci):
         self.__ci = ci
     
     def process(self, element):

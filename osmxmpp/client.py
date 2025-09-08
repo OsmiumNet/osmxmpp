@@ -373,7 +373,7 @@ class XmppClient:
 
         feature_ci = XmppClientInterface(self, feature, permissions)
 
-        feature.connect_ci(feature_ci)
+        feature._connect_ci(feature_ci)
         self.__features[feature.ID] = feature_ci
         self.__features_queue.append(feature.ID)
 
@@ -413,7 +413,7 @@ class XmppClient:
 
         extension_ci = XmppClientInterface(self, extension, permissions)
         
-        extension.connect_ci(extension_ci)
+        extension._connect_ci(extension_ci)
 
         self.__extensions[extension.ID] = extension_ci
         self.__extensions_queue.append(extension.ID)
