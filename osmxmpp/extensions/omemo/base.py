@@ -158,7 +158,7 @@ class OmemoExtension(XmppExtension):
                                 [XmlTextElement(wrapped)])
                 )
 
-            xml = OmemoXml.send_message(
+            encrypted_message = OmemoXml.send_message(
                         self.__ci.get_jid(),
                         jid_to,
                         self._bundle.get_device_id(),
@@ -166,12 +166,11 @@ class OmemoExtension(XmppExtension):
                         payload
             )
 
-            encrypted_message = XmppMessage(xml)
-
             # Wrap encrypted message into message
             final_message = message
-            final_message.add_child(encrypted_message.get_child_by_name("encrypted"))
-            final_message.body._xml = encrypted_message.get_child_by_name("body")
+            final_message._xml.add_child(encrypted_message.get_child_by_name("encrypted"))
+            final_message._xml.remove_child_by_name("body")
+            final_message._xml.add_child(encrypted_message.get_child_by_name("body"))
 
         elif (devices is None):
             xml = self._send_init_message(jid_to, body)
