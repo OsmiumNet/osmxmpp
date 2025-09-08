@@ -16,7 +16,7 @@ class SubscriptionExtension(XmppExtension):
 
     ID = "osmiumnet.roster.subscription"
 
-    # List of required permisions
+    # List of required permissions
     REQUIREMENTS: List[XmppPermission] = [
         XmppPermission.GET_JID,
         XmppPermission.SEND_XML,
@@ -42,9 +42,9 @@ class SubscriptionExtension(XmppExtension):
             self.__on_presence(presence)
         
         # Hooks
-        @self.__ci.hook_iq
-        def hook_iq(iq: XmlElement):
-            self.__hook_iq(iq)
+        @self.__ci.hook_on_iq
+        def hook_on_iq(iq: XmlElement):
+            self.__hook_on_iq(iq)
 
         # Variables
         @self.__ci.variables.function
@@ -72,7 +72,7 @@ class SubscriptionExtension(XmppExtension):
                 xml = SubscriptionXml.send_subscribed(jid)
                 self.__ci.send_xml(xml)
 
-    def __hook_iq(self, iq: XmlElement):
+    def __hook_on_iq(self, iq: XmlElement):
         calls = [
             self.__process_check_subscriptions(iq),
         ]
@@ -117,7 +117,6 @@ class SubscriptionExtension(XmppExtension):
         # If jid from ask list is in ensure list, it sends subscribed to it
         for ask_child in ask_children_list:
             if (ask_child in self.__ensure_list):
-                print(ask_child)
                 # Send subscribed
                 xml = SubscriptionXml.send_subscribed(ensure_jid)
                 self.__ci.send_xml(xml)
