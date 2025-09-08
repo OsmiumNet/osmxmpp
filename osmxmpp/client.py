@@ -142,6 +142,9 @@ class XmppClient:
 
         XmppValidation.validate_jid(jid)
 
+        if message_author:
+            XmppValidation.validate_jid(message_author)
+
         message = XmppMessage()
         message._xml.add_attribute(XmlAttribute("to", jid))
         message._xml.add_attribute(XmlAttribute("type", msg_type))

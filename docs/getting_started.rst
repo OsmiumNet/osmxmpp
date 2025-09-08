@@ -60,6 +60,16 @@ To send a message, use the ``send_message`` method:
     client.send_message("john@jabber.org", "Hello, John!")
 
 
+Replying to a message
+---------------------
+
+To reply to a message, use the ``reply_to_message`` method:
+
+.. code-block:: python
+
+    client.reply_to_message("12345678", "john@jabber.org", "Thanks, John!")
+
+
 Receiving a message
 -------------------
 
