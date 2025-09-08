@@ -95,7 +95,7 @@ class XmppClient:
             type (str): The message type. (Default: "chat")
         
         Example:
-            >>> client.send_message("john@jabber.org", "Hello, John!", type="chat")
+            >>> client.send_message("john@jabber.org", "Hello, John!")
         """
 
         jid = args[0] if len(args) > 0 else kwargs.get("jid")
@@ -111,6 +111,52 @@ class XmppClient:
 
         message._xml.add_child(XmlElement("body"))
         message.body._xml.add_child(XmlTextElement(content))
+
+        for hook in self.__hooks["send_message"]:
+            message = hook(message, *args, **kwargs)
+
+        if not message:
+            return
+        self._send_xml(message._xml)
+    
+    def reply_to_message(self, *args, **kwargs):
+        """
+        Replies to specific message.
+
+        Args:
+            message_id (str): The message ID to reply to.
+            jid (str): The JID to send the message to.
+            message (str): The message to send.
+            type (str): The message type. (Default: "chat")
+            message_author (str): The replied message author. If none, equals to jid. (Default: None)
+        
+        Example:
+            >>> client.reply_to_message("12345678", "john@jabber.org", "Thanks, John!")
+        """
+
+        message_id = args[0] if len(args) > 0 else kwargs.get("message_id")
+        jid = args[1] if len(args) > 1 else kwargs.get("jid")
+        content = args[2] if len(args) > 2 else kwargs.get("message")
+        msg_type = kwargs.get("type", "chat")
+        message_author = kwargs.get("message_author", None)
+
+        XmppValidation.validate_jid(jid)
+
+        message = XmppMessage()
+        message._xml.add_attribute(XmlAttribute("to", jid))
+        message._xml.add_attribute(XmlAttribute("type", msg_type))
+        message._xml.add_attribute(XmlAttribute("id", str(uuid.uuid4())))
+
+        message._xml.add_child(XmlElement("body"))
+        message.body._xml.add_child(XmlTextElement(content))
+
+        message._xml.add_child(XmlElement("reply"))
+        message.reply._xml.add_attribute(XmlAttribute("xmlns", "urn:xmpp:reply:0"))
+        message.reply._xml.add_attribute(XmlAttribute("id", message_id))
+        if message_author:
+            message.reply._xml.add_attribute(XmlAttribute("to", message_author))
+        else:
+            message.reply._xml.add_attribute(XmlAttribute("to", jid))
 
         for hook in self.__hooks["send_message"]:
             message = hook(message, *args, **kwargs)
