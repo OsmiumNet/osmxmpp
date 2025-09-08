@@ -170,7 +170,7 @@ class OmemoExtension(XmppExtension):
 
             # Wrap encrypted message into message
             final_message = message
-            final_message.add_child(encrypted_message.get_child_by_name("encrypted")
+            final_message.add_child(encrypted_message.get_child_by_name("encrypted"))
             final_message.body._xml = encrypted_message.get_child_by_name("body")
 
         elif (devices is None):
