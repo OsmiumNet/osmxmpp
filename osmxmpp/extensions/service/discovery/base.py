@@ -22,10 +22,10 @@ class ServiceDiscoveryExtension(XmppExtension):
     def __init__(self):
         pass
      
-    def connect_ci(self, ci):
+    def _connect_ci(self, ci):
         self.__ci = ci
 
-    def process(self):
+    def _process(self):
         # Variables
         @self.__ci.variables.function
         def discover():

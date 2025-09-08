@@ -418,7 +418,7 @@ class XmppClient:
         self.__extensions[extension.ID] = extension_ci
         self.__extensions_queue.append(extension.ID)
 
-        self.__extensions[extension.ID].object.process()
+        self.__extensions[extension.ID].object._process()
     
     def connect_extensions(self, extensions_with_permissions: List[Tuple[XmppExtension, List[XmppPermission] | XmppPermission.ALL]] ) -> None:
         """
@@ -481,7 +481,7 @@ class XmppClient:
                     if feature_xml:
                         logger.debug(f"Processing feature '{feature.ID}'...")
                         
-                        feature.process(feature_xml)
+                        feature._process(feature_xml)
                         processed_feature = feature
                         break
                 

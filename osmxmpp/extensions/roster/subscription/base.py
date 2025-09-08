@@ -35,7 +35,7 @@ class SubscriptionExtension(XmppExtension):
     def _connect_ci(self, ci):
         self.__ci = ci
 
-    def process(self):
+    def _process(self):
         # Listeners
         @self.__ci.on_presence
         def on_presence(presence: XmlElement):

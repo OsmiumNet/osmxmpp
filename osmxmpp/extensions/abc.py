@@ -22,7 +22,7 @@ class XmppExtension(ABC):
         ...
     
     @abstractmethod
-    def process(self) -> None:
+    def _process(self) -> None:
         """
         Processes the extension.
         """

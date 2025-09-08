@@ -90,7 +90,7 @@ class SaslFeature(XmppFeature):
     def _connect_ci(self, ci):
         self.__ci = ci
     
-    def process(self, element):
+    def _process(self, element):
         mechanisms_xml = element
 
         logger.debug(f"Processing mechanisms...")

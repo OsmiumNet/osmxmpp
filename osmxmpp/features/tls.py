@@ -34,7 +34,7 @@ class TlsFeature(XmppFeature):
     def _connect_ci(self, ci):
         self.__ci = ci
 
-    def process(self, element):
+    def _process(self, element):
         tls_handshake = XmlElement(
             "starttls",
 

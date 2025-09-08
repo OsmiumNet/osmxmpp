@@ -26,7 +26,7 @@ class XmppFeature(ABC):
         ...
     
     @abstractmethod
-    def process(self, element) -> None:
+    def _process(self, element) -> None:
         """
         Processes the feature.
 
