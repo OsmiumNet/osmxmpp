@@ -226,6 +226,13 @@ Here is an example code that connects to the XMPP server, and listens to the ``/
         XmppPermission.ALL
     )
 
+    client.connect_feature(
+        BindFeature(
+            "osmxmpp" # resource
+        ), 
+        XmppPermission.ALL
+    )
+
     try:
         client.connect()
     except KeyboardInterrupt:
