@@ -40,6 +40,8 @@ class OmemoExtension(XmppExtension):
         self._bundle = bundle
         self.__omemo = Omemo(self._bundle, storage)
 
+        self.__registered_xmls: Dict[str, str] = {}
+
         self.__contact_bundles = {}
 
     def _connect_ci(self, ci):
@@ -87,12 +89,36 @@ class OmemoExtension(XmppExtension):
         """
 
         xml = OmemoXml.fetch_devices(self.__ci.get_jid(), jid)
+        self.__send_registered_xml(xml, "fetch_devices")
+
+
+    def __send_registered_xml(xml: XmlElement, name: str):
+        self.__register_xml(xml, name)
         self.__ci.send_xml(xml)
 
-    def __on_ready(self):
-        #xml = OmemoXml.publish_device(self.__ci.get_jid(False), self._bundle.get_device_id())
-        #self.__ci.send_xml(xml)
 
+    # Manage text to ensure they were sent from the extension 
+    def __register_xml(self, xml: XmlElement, name: str):
+        xml_id = xml.get_attribute_by_name("id")
+        if (xml_id):
+            self.__registered_xmls[xml_id] = name
+
+    def __get_xml_registration(self, xml: XmlElement) -> Tuple[bool, str]:
+        xml_id = xml.get_attribute_by_name("id")
+
+        is_registered = False
+        name = ""
+        if (xml_id):
+            is_registered = xml_id in self._registered_xmls 
+            if (is_registered):
+                name = self.__registered_xmls[xml_id]
+                del self.__registered_xmls[xml_id]
+        return is_registered, name
+    
+
+
+    # Client events 
+    def __on_ready(self):
         #xml = OmemoXml.publish_bundle_information(self.__ci.get_jid(False), self._bundle)
         #self.__ci.send_xml(xml)
         pass
@@ -101,8 +127,12 @@ class OmemoExtension(XmppExtension):
     def __on_iq(self, iq):
         iq_id = iq.get_attribute_by_name("id")
 
-        self._parse_bundle_response(iq)
-        self._parse_devices_response(iq)
+
+        is_registered, name = self.__get_xml_registration(iq)
+
+        if (is_registered):
+            self._parse_bundle_response(iq)
+            self._parse_devices_response(iq)
 
     def __hook_on_message(self, message: XmppMessage):
         final_message = None
@@ -208,7 +238,7 @@ class OmemoExtension(XmppExtension):
                 self.__contact_bundles[contact_jid][device_id] = {}
 
                 xml = OmemoXml.fetch_bundles(self.__ci.get_jid(),  contact_jid, device_id)
-                self.__ci.send_xml(xml)
+                self.__send_registered_xml(xml, "fetch_bundles")
 
         except Exception as e:
             print(f"Error parsing devices: {e}")
