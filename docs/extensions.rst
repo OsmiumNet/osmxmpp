@@ -20,8 +20,8 @@ Omemo
     :undoc-members:
     :show-inheritance:
 
-.. _roster_subscription:
 
+.. _roster_subscription:
 
 Roster subscription
 ^^^^^^^^^^^^^^^^^^^
