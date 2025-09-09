@@ -159,7 +159,7 @@ class OmemoXml:
                 jid_to: str, 
                 device: int, 
                 device_to: int,
-                wrapped: str,
+                key_data: str,
             ) -> XmlElement:
         xml_str = f"""
         <message from="{jid}" to="{jid_to}" type="chat" id="{OmemoXml.make_id()}">
@@ -167,7 +167,7 @@ class OmemoXml:
                 <header sid="{device}">
                     <keys jid="{jid_to}">
                         <key rid="{device_to}" kex="true">
-                             {wrapped}
+                             {key_data}
                         </key>
                     </keys>
                 </header>
@@ -188,7 +188,6 @@ class OmemoXml:
                 jid_to: str, 
                 device: int, 
                 keys: List[XmlElement],
-                payload: str,
             ) -> XmlElement:
         xml_str_keys = "\n".join([nkey.to_string(raw=False) for nkey in keys]) 
         xml_str = f"""
@@ -198,7 +197,7 @@ class OmemoXml:
                     {xml_str_keys}
                 </header>
                 <payload>
-                    {payload}
+                     {XmlTextElement("ciphertext-of-sce-envelope").to_string()}
                 </payload>
             </encrypted>
             <body>

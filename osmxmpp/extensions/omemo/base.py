@@ -154,20 +154,31 @@ class OmemoExtension(XmppExtension):
         jid_from = message.from_jid.split("/")[0]
         if (message.encrypted):
             # TODO: check device 
-            wrapped = message.encrypted.header.keys.key
+            key_data = message.encrypted.header.keys.key
             payload = message.encrypted.payload
             device_from = int(message.encrypted.header._xml.get_attribute_by_name("sid").value)
 
             devices = self.__omemo.get_device_list(jid_from)
             if (type(devices) == list):
-                wrapped_bytes = base64.b64decode(wrapped.encode("utf-8"))
+                key_data_js = json.loads(base64.b64decode(key_data).decode('utf-8'))
+
+                wrapped = key_data_js["k"]
+                payload = key_data_js["p"]
+
+                wrapped_key_bytes = base64.b64decode(wrapped.encode("utf-8"))
                 payload_bytes = base64.b64decode(payload.encode("utf-8"))
-                de_message = self.__omemo.receive_message(jid_from, device_from, wrapped_bytes, payload_bytes)
+
+                de_message = self.__omemo.receive_message(
+                            jid=jid_from, 
+                            device=device_from,
+                            wrapped_message_key=wrapped_key_bytes, 
+                            payload=payload_bytes
+                )
 
                 final_massage = message
                 final_massage.body = de_message.decode("utf-8")
             else:
-                de_message = self.__receive_init_message(jid_from, device_from, wrapped)
+                de_message = self.__receive_init_message(jid_from, device_from, key_data)
 
                 if (de_message):
                     final_massage = message
@@ -187,28 +198,35 @@ class OmemoExtension(XmppExtension):
             xml_keys = XmlElement("keys", [XmlAttribute("jid", jid_to)])
             payload = ""
             for device in devices:
-                wrapped_key, payload_bytes = self.__omemo.send_message(
+                wrapped_key_bytes, payload_bytes = self.__omemo.send_message(
                             jid=jid_to,
                             device=device,
                             message_bytes=body.encode("utf-8")
                 )
 
-                wrapped = base64.b64encode(wrapped_key).decode("utf-8")
+                wrapped = base64.b64encode(wrapped_key_bytes).decode("utf-8")
                 payload = base64.b64encode(payload_bytes).decode("utf-8")
 
+                key_data_blob = json.dumps({
+                    "k": wrapped,
+                    "p": payload
+                }).encode('utf-8')
+
+                key_data = base64.b64encode(key_data_blob).decode('utf-8')
+
                 xml_keys.add_child(
-                            XmlElement(
-                                "key", 
-                                [XmlAttribute("rid", device)],
-                                [XmlTextElement(wrapped)])
+                    XmlElement(
+                        "key", 
+                        [XmlAttribute("rid", device)],
+                        [XmlTextElement(key_data)]
+                    )
                 )
 
             encrypted_message = OmemoXml.send_message(
                         self.__ci.get_jid(),
                         jid_to,
                         self._bundle.get_device_id(),
-                        [xml_keys],
-                        payload
+                        [xml_keys]
             )
         elif (devices is None):
             encrypted_message = self.__send_init_message(jid_to, body)
@@ -316,7 +334,7 @@ class OmemoExtension(XmppExtension):
                     onetime_prekey=XKeyPair.base64_to_public_key(bundle_to["opks"][opk_id])
             )
             
-            wrapped_blob = json.dumps({
+            key_data_blob = json.dumps({
                 "ik": self._bundle.get_indentity().get_base64_public_key(),
                 "ek": XKeyPair.public_key_to_base64(ek_pub),
                 "spk_id": "0",
@@ -324,14 +342,14 @@ class OmemoExtension(XmppExtension):
                 "ct": base64.b64encode(en_message).decode("utf-8") 
             }).encode('utf-8')
 
-            wrapped = base64.b64encode(wrapped_blob).decode('utf-8')
+            key_data = base64.b64encode(key_data_blob).decode('utf-8')
 
             xml_message = OmemoXml.send_init_message(
                     jid=self.__ci.get_jid(),
                     jid_to=jid_to,
                     device=self._bundle.get_device_id(),
                     device_to=device_to,
-                    wrapped=wrapped 
+                    key_data=key_data 
             )
             
             return xml_message
@@ -339,13 +357,13 @@ class OmemoExtension(XmppExtension):
     def __receive_init_message(self, jid_from: str, device_from: int, wrapped: str):
         message = None
         if (jid_from in self.__contact_bundles):
-            wrapped_js = json.loads(base64.b64decode(wrapped).decode('utf-8'))
+            key_data_js = json.loads(base64.b64decode(wrapped).decode('utf-8'))
 
-            en_message = base64.b64decode(wrapped_js["ct"].encode("utf-8"))
-            indentity_key = EdKeyPair.base64_to_public_key(wrapped_js["ik"])
-            ephemeral_key = XKeyPair.base64_to_public_key(wrapped_js["ek"])
-            spk_id = wrapped_js["spk_id"]
-            opk_id = wrapped_js["opk_id"]
+            en_message = base64.b64decode(key_data_js["ct"].encode("utf-8"))
+            indentity_key = EdKeyPair.base64_to_public_key(key_data_js["ik"])
+            ephemeral_key = XKeyPair.base64_to_public_key(key_data_js["ek"])
+            spk_id = key_data_js["spk_id"]
+            opk_id = key_data_js["opk_id"]
 
             de_message = self.__omemo.accept_init_message(
                     jid=jid_from,
