@@ -2,6 +2,7 @@ import os
 import base64
 import json
 import time
+import random
 import struct
 import secrets
 
@@ -343,8 +344,10 @@ class OmemoExtension(XmppExtension):
             # TODO: many devices
             device_to = list(self.__contact_bundles[jid_to].keys())[0]
             bundle_to = self.__contact_bundles[jid_to][device_to]
-            # TODO: random opk id
-            opk_id = "0" 
+            
+            # Choose random opk id
+            opk_id = random.choice(list(bundle_to["opks"].keys())) 
+
             ek_pub, en_message = self.__omemo.create_init_message(
                     jid=jid_to,
                     device=device_to,
