@@ -37,8 +37,8 @@ class OmemoExtension(XmppExtension):
     ]
 
     def __init__(self, bundle: OmemoBundle, storage: OmemoStorage):
-        self._bundle = bundle
-        self.__omemo = Omemo(self._bundle, storage)
+        self.__bundle = bundle
+        self.__omemo = Omemo(self.__bundle, storage)
 
         self.__registered_xmls: Dict[str, str] = {}
 
@@ -71,7 +71,7 @@ class OmemoExtension(XmppExtension):
         # Variables
         @self.__ci.variables.function
         def publish_device_information():
-            xml = OmemoXml.publish_device(self.__ci.get_jid(False), self._bundle.get_device_id())
+            xml = OmemoXml.publish_device(self.__ci.get_jid(False), self.__bundle.get_device_id())
             self.__send_registered_xml(xml, "publish_device:func")
 
         @self.__ci.variables.function
@@ -134,7 +134,7 @@ class OmemoExtension(XmppExtension):
             return
 
         if (name == "publish_device:func"):
-            xml = OmemoXml.publish_bundle_information(self.__ci.get_jid(False), self._bundle)
+            xml = OmemoXml.publish_bundle_information(self.__ci.get_jid(False), self.__bundle)
             self.__send_registered_xml(xml, "publish_bundle_information")
         elif (name == "fetch_devices:func"):
             self.__parse_devices_response(iq)
@@ -153,9 +153,30 @@ class OmemoExtension(XmppExtension):
 
         jid_from = message.from_jid.split("/")[0]
         if (message.encrypted):
-            # TODO: check device 
-            key_data = message.encrypted.header.keys.key
-            payload = message.encrypted.payload
+            # Find and store JID keys
+            device_keys = None
+            for jid_keys in message.encrypted.header._xml.children:
+                jid = jid_keys.get_attribute_by_name("jid").value
+                if (self.__ci.get_jid(False) == jid):
+                    device_keys = jid_keys
+                    break
+
+            if (not device_keys):
+                return message
+
+            # Find and store that device key
+            device_key = None
+            for key in device_keys.children:
+                rid = key.get_attribute_by_name("rid").value
+                device_rid = self.__bundle.get_device_id()
+                if (device_rid == int(rid)):
+                    device_key = key
+                    break
+
+            if (not device_key):
+                return message
+
+            key_data = device_key.children[0].to_string()
             device_from = int(message.encrypted.header._xml.get_attribute_by_name("sid").value)
 
             devices = self.__omemo.get_device_list(jid_from)
@@ -225,7 +246,7 @@ class OmemoExtension(XmppExtension):
             encrypted_message = OmemoXml.send_message(
                         self.__ci.get_jid(),
                         jid_to,
-                        self._bundle.get_device_id(),
+                        self.__bundle.get_device_id(),
                         [xml_keys]
             )
         elif (devices is None):
@@ -335,7 +356,7 @@ class OmemoExtension(XmppExtension):
             )
             
             key_data_blob = json.dumps({
-                "ik": self._bundle.get_indentity().get_base64_public_key(),
+                "ik": self.__bundle.get_indentity().get_base64_public_key(),
                 "ek": XKeyPair.public_key_to_base64(ek_pub),
                 "spk_id": "0",
                 "opk_id": opk_id,
@@ -347,7 +368,7 @@ class OmemoExtension(XmppExtension):
             xml_message = OmemoXml.send_init_message(
                     jid=self.__ci.get_jid(),
                     jid_to=jid_to,
-                    device=self._bundle.get_device_id(),
+                    device=self.__bundle.get_device_id(),
                     device_to=device_to,
                     key_data=key_data 
             )
