@@ -10,7 +10,7 @@ setup(
     packages=find_packages(),
     install_requires=[
         "osmxml==1.0.1",
-        "osmomemo==1.0.0",
+        "osmomemo==1.1.2",
     ],
     python_requires=">=3.10",
 )

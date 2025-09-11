@@ -85,16 +85,16 @@ wheels = [
 
 [[package]]
 name = "osmomemo"
-version = "1.0.0"
+version = "1.1.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "cryptography" },
     { name = "pynacl" },
     { name = "sqlalchemy" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/06/be/004de93e4957147de67098734529f0ad8d6516b0a673bb219fc90ad0f681/osmomemo-1.0.0.tar.gz", hash = "sha256:ee99c2f83b6d32f879d6571e3cc60b76a568c955820ca94c0fb0b70102bf7980", size = 7137, upload-time = "2025-09-06T13:21:55.325Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/96/b4/24fdf61a7f17abf8e54997a2a92195aa3d61f905b44fa6b0201d272de84a/osmomemo-1.1.2.tar.gz", hash = "sha256:11a5272ea8584d95be57db3781e3d8b38848b0ed5948da45525b5438b6c9a485", size = 7834, upload-time = "2025-09-11T11:21:08.19Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/fc/b4/3c98d7b1e2c4b304c2189aa6653da96c85f47d087b2130502f8e7b414c46/osmomemo-1.0.0-py3-none-any.whl", hash = "sha256:a5cd089d6d9c534808c4b1492ae71ca32853ee12e1b5db63ac47bd06f41b94e2", size = 7581, upload-time = "2025-09-06T13:21:54.321Z" },
+    { url = "https://files.pythonhosted.org/packages/37/5c/c62d28e15f0c5ec5e831e95cd5d2de31fbc8adfc0eb8bf1c2cb8b15ffc4c/osmomemo-1.1.2-py3-none-any.whl", hash = "sha256:e4a32bcc246a2c920122191c98444374e7e5e5800148b26e926823ee3fd841bd", size = 8066, upload-time = "2025-09-11T11:21:06.99Z" },
 ]
 
 [[package]]
@@ -117,7 +117,7 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
-    { name = "osmomemo", specifier = "==1.0.0" },
+    { name = "osmomemo", specifier = "==1.1.2" },
     { name = "osmxml", specifier = "==1.0.1" },
 ]
 
