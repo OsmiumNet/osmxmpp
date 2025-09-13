@@ -168,6 +168,45 @@ class XmppClient:
             return
         self._send_xml(message._xml)
 
+    def edit_message(self, *args, **kwargs):
+        """
+        Editing specific message.
+
+        Args:
+            message_id (str): The message ID to edit.
+            jid (str): The JID to send the message to.
+            message (str): The message to send.
+            type (str): The message type. (Default: "chat")
+        
+        Example:
+            >>> client.edit_message("12345679", "john@jabber.org", "Thank you very much, John!")
+        """
+
+        message_id = args[0] if len(args) > 0 else kwargs.get("message_id")
+        jid = args[1] if len(args) > 1 else kwargs.get("jid")
+        content = args[2] if len(args) > 2 else kwargs.get("message")
+        msg_type = kwargs.get("type", "chat")
+
+        XmppValidation.validate_jid(jid)
+
+        message = XmppMessage()
+        message._xml.add_attribute(XmlAttribute("to", jid))
+        message._xml.add_attribute(XmlAttribute("type", msg_type))
+        message._xml.add_attribute(XmlAttribute("id", str(uuid.uuid4())))
+
+        message._xml.add_child(XmlElement("body"))
+        message.body._xml.add_child(XmlTextElement(content))
+
+        message._xml.add_child(XmlElement("replace"))
+        message.replace._xml.add_attribute(XmlAttribute("xmlns", "urn:xmpp:message-correct:0"))
+        message.replace._xml.add_attribute(XmlAttribute("id", message_id))
+
+        for hook in self.__hooks["send_message"]:
+            message = hook(message, *args, **kwargs)
+
+        if not message:
+            return
+        self._send_xml(message._xml)
 
 
     def on_connect(self, handler:Callable) -> Callable:
