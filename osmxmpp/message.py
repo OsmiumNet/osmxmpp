@@ -6,10 +6,6 @@ class _XmppMessageElement:
     
     @property
     def xml(self):
-        """
-        Gets the editable XML element of this message.
-        """
-
         return self.__xml
 
     def get_attribute_by_index(self, index:int):
@@ -56,6 +52,10 @@ class XmppMessage:
 
     @property
     def xml(self):
+        """
+        Gets the editable XML element of this message.
+        """
+        
         return self.__xml
 
     def get_attribute_by_index(self, index:int):
