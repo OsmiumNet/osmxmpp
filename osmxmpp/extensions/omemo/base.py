@@ -156,7 +156,7 @@ class OmemoExtension(XmppExtension):
         if (message.encrypted):
             # Find and store JID keys
             device_keys = None
-            for jid_keys in message.encrypted.header._xml.children:
+            for jid_keys in message.encrypted.header.xml.children:
                 jid = jid_keys.get_attribute_by_name("jid").value
                 if (self.__ci.get_jid(False) == jid):
                     device_keys = jid_keys
@@ -178,7 +178,7 @@ class OmemoExtension(XmppExtension):
                 return message
 
             key_data = device_key.children[0].to_string()
-            device_from = int(message.encrypted.header._xml.get_attribute_by_name("sid").value)
+            device_from = int(message.encrypted.header.xml.get_attribute_by_name("sid").value)
 
             devices = self.__omemo.get_device_list(jid_from)
             if (type(devices) == list):
@@ -257,9 +257,9 @@ class OmemoExtension(XmppExtension):
             if (not final_message):
                 final_message = message
             # Wrap encrypted message into message
-            final_message._xml.add_child(encrypted_message.get_child_by_name("encrypted"))
-            final_message._xml.remove_child_by_name("body")
-            final_message._xml.add_child(encrypted_message.get_child_by_name("body"))
+            final_message.xml.add_child(encrypted_message.get_child_by_name("encrypted"))
+            final_message.xml.remove_child_by_name("body")
+            final_message.xml.add_child(encrypted_message.get_child_by_name("body"))
 
         return final_message if final_message else message 
 

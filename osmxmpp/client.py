@@ -105,19 +105,19 @@ class XmppClient:
         XmppValidation.validate_jid(jid)
 
         message = XmppMessage()
-        message._xml.add_attribute(XmlAttribute("to", jid))
-        message._xml.add_attribute(XmlAttribute("type", msg_type))
-        message._xml.add_attribute(XmlAttribute("id", str(uuid.uuid4())))
+        message.xml.add_attribute(XmlAttribute("to", jid))
+        message.xml.add_attribute(XmlAttribute("type", msg_type))
+        message.xml.add_attribute(XmlAttribute("id", str(uuid.uuid4())))
 
-        message._xml.add_child(XmlElement("body"))
-        message.body._xml.add_child(XmlTextElement(content))
+        message.xml.add_child(XmlElement("body"))
+        message.body.xml.add_child(XmlTextElement(content))
 
         for hook in self.__hooks["send_message"]:
             message = hook(message, *args, **kwargs)
 
         if not message:
             return
-        self._send_xml(message._xml)
+        self._send_xml(message.xml)
     
     def reply_to_message(self, *args, **kwargs):
         """
@@ -146,27 +146,27 @@ class XmppClient:
             XmppValidation.validate_jid(message_author)
 
         message = XmppMessage()
-        message._xml.add_attribute(XmlAttribute("to", jid))
-        message._xml.add_attribute(XmlAttribute("type", msg_type))
-        message._xml.add_attribute(XmlAttribute("id", str(uuid.uuid4())))
+        message.xml.add_attribute(XmlAttribute("to", jid))
+        message.xml.add_attribute(XmlAttribute("type", msg_type))
+        message.xml.add_attribute(XmlAttribute("id", str(uuid.uuid4())))
 
-        message._xml.add_child(XmlElement("body"))
-        message.body._xml.add_child(XmlTextElement(content))
+        message.xml.add_child(XmlElement("body"))
+        message.body.xml.add_child(XmlTextElement(content))
 
         message._xml.add_child(XmlElement("reply"))
-        message.reply._xml.add_attribute(XmlAttribute("xmlns", "urn:xmpp:reply:0"))
-        message.reply._xml.add_attribute(XmlAttribute("id", message_id))
+        message.reply.xml.add_attribute(XmlAttribute("xmlns", "urn:xmpp:reply:0"))
+        message.reply.xml.add_attribute(XmlAttribute("id", message_id))
         if message_author:
-            message.reply._xml.add_attribute(XmlAttribute("to", message_author))
+            message.reply.xml.add_attribute(XmlAttribute("to", message_author))
         else:
-            message.reply._xml.add_attribute(XmlAttribute("to", jid))
+            message.reply.xml.add_attribute(XmlAttribute("to", jid))
 
         for hook in self.__hooks["send_message"]:
             message = hook(message, *args, **kwargs)
 
         if not message:
             return
-        self._send_xml(message._xml)
+        self._send_xml(message.xml)
 
     def edit_message(self, *args, **kwargs):
         """
@@ -190,23 +190,23 @@ class XmppClient:
         XmppValidation.validate_jid(jid)
 
         message = XmppMessage()
-        message._xml.add_attribute(XmlAttribute("to", jid))
-        message._xml.add_attribute(XmlAttribute("type", msg_type))
-        message._xml.add_attribute(XmlAttribute("id", str(uuid.uuid4())))
+        message.xml.add_attribute(XmlAttribute("to", jid))
+        message.xml.add_attribute(XmlAttribute("type", msg_type))
+        message.xml.add_attribute(XmlAttribute("id", str(uuid.uuid4())))
 
-        message._xml.add_child(XmlElement("body"))
-        message.body._xml.add_child(XmlTextElement(content))
+        message.xml.add_child(XmlElement("body"))
+        message.body.xml.add_child(XmlTextElement(content))
 
-        message._xml.add_child(XmlElement("replace"))
-        message.replace._xml.add_attribute(XmlAttribute("xmlns", "urn:xmpp:message-correct:0"))
-        message.replace._xml.add_attribute(XmlAttribute("id", message_id))
+        message.xml.add_child(XmlElement("replace"))
+        message.replace.xml.add_attribute(XmlAttribute("xmlns", "urn:xmpp:message-correct:0"))
+        message.replace.xml.add_attribute(XmlAttribute("id", message_id))
 
         for hook in self.__hooks["send_message"]:
             message = hook(message, *args, **kwargs)
 
         if not message:
             return
-        self._send_xml(message._xml)
+        self._send_xml(message.xml)
 
 
     def on_connect(self, handler:Callable) -> Callable:

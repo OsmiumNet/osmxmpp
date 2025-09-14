@@ -2,26 +2,34 @@ from osmxml import *
 
 class _XmppMessageElement:
     def __init__(self, xml:XmlElement):
-        self._xml = xml
+        self.__xml = xml
+    
+    @property
+    def xml(self):
+        """
+        Gets the editable XML element of this message.
+        """
+
+        return self.__xml
 
     def get_attribute_by_index(self, index:int):
-        return self._xml.get_attribute_by_index(index)
+        return self.__xml.get_attribute_by_index(index)
     
     def get_child_by_index(self, index:int):
-        return _get_xmpp_message_element_or_text(self._xml.get_child_by_index(index))
+        return _get_xmpp_message_element_or_text(self.__xml.get_child_by_index(index))
     
 
     def __getattr__(self, name):
         if self._xml.get_attribute_by_name(name):
-            return self._xml.get_attribute_by_name(name).value
+            return self.__xml.get_attribute_by_name(name).value
         
-        return _get_xmpp_message_element_or_text(self._xml.get_child_by_name(name))
+        return _get_xmpp_message_element_or_text(self.__xml.get_child_by_name(name))
     
     def __getitem__(self, index):
         return self.get_child_by_index(index)
     
     def __repr__(self):
-        return f"<_XmppMessageElement {self._xml.to_string()}>"
+        return f"<_XmppMessageElement {self.__xml.to_string()}>"
 
 def _get_xmpp_message_element_or_text(xml: XmlElement) -> _XmppMessageElement | str:
     if xml == None:
@@ -42,28 +50,32 @@ class XmppMessage:
 
     def __init__(self, xml: XmlElement=None):
         if xml:
-            self._xml = xml
+            self.__xml = xml
         else:
-            self._xml = XmlElement("message")
+            self.__xml = XmlElement("message")
+
+    @property
+    def xml(self):
+        return self.__xml
 
     def get_attribute_by_index(self, index:int):
-        return self._xml.get_attribute_by_index(index)
+        return self.__xml.get_attribute_by_index(index)
     
     def get_child_by_index(self, index:int):
-        return _get_xmpp_message_element_or_text(self._xml.get_child_by_index(index))
+        return _get_xmpp_message_element_or_text(self.__xml.get_child_by_index(index))
 
 
     def __getattr__(self, name):
         if name == "from_jid":
-            return self._xml.get_attribute_by_name("from").value
+            return self.__xml.get_attribute_by_name("from").value
         
         if name == "to_jid":
-            return self._xml.get_attribute_by_name("to").value
+            return self.__xml.get_attribute_by_name("to").value
         
-        if self._xml.get_attribute_by_name(name):
-            return self._xml.get_attribute_by_name(name).value
+        if self.__xml.get_attribute_by_name(name):
+            return self.__xml.get_attribute_by_name(name).value
 
-        return _get_xmpp_message_element_or_text(self._xml.get_child_by_name(name))
+        return _get_xmpp_message_element_or_text(self.__xml.get_child_by_name(name))
     
     def __getitem__(self, index):
         return self.get_child_by_index(index)
