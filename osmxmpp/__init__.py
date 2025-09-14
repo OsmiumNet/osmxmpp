@@ -11,6 +11,8 @@ from .ci import XmppClientInterface
 from .client import XmppClient
 
 from .extensions.abc import XmppExtension
+from .extensions.omemo import OmemoExtension
+from .extensions.service.discovery import ServiceDiscoveryExtension
 
 from .features.abc import XmppFeature
 from .features.tls import TlsFeature
@@ -30,6 +32,10 @@ __all__ = [
 
 
     "XmppExtension",
+
+    "OmemoExtension",
+    
+    "ServiceDiscoveryExtension",
 
 
     "XmppFeature",
