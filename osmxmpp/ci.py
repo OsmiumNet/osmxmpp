@@ -77,7 +77,7 @@ class XmppClientInterface:
         """
         self.__handle_permission(XmppPermission.SEND_XML)
         return self.__client._send_xml(xml)
-    o
+    
     def recv_xml(self) -> XmlElement:
         """
         Receives an XML element from the XMPP client.
