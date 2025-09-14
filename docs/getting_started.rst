@@ -50,7 +50,7 @@ The handler will be called when the client is ready to send and receive XMPP sta
         on_ready()
 
 
-Sending a message
+Managing messages
 -----------------
 
 To send a message, use the ``send_message`` method:
@@ -59,19 +59,21 @@ To send a message, use the ``send_message`` method:
 
     client.send_message("john@jabber.org", "Hello, John!")
 
-
-Replying to a message
----------------------
-
 To reply to a message, use the ``reply_to_message`` method:
 
 .. code-block:: python
 
-    client.reply_to_message("12345678", "john@jabber.org", "Thanks, John!")
+    client.reply_to_message("12345678", "john@jabber.org", "Thanks you very m.ch, John!")
+
+To edit a message, use the ``edit_message`` method:
+
+.. code-block:: python
+
+    client.edit_message("87654321", "john@jabber.org", "Thank you very much, John!")
 
 
-Receiving a message
--------------------
+Receiving stanzas
+-----------------
 
 To receive a message, you need to register a handler for the ``message`` event:
 
@@ -83,6 +85,23 @@ To receive a message, you need to register a handler for the ``message`` event:
             return
 
         print(f"Received message from {message.from_jid}: {message.body}")
+
+To receive a presence, you need to register a handler for the ``presence`` event:
+
+.. code-block:: python
+
+    @client.on_presence
+    def on_presence(presence):
+        print(f"Received presence from {presence.from_jid}: {presence.body}")
+
+
+To receive an IQ, you need to register a handler for the ``iq`` event:
+
+.. code-block:: python
+
+    @client.on_iq
+    def on_iq(iq):
+        print(f"Received IQ from {iq.from_jid}: {iq.body}")
     
 
 Features
@@ -110,6 +129,11 @@ To connect features to the client, you need to call the ``connect_feature`` meth
     # or
     client.connect_feature(
         TlsFeature(), 
+        TlsFeature.REQUIRED_PERMISSIONS
+    )
+    # or
+    client.connect_feature(
+        TlsFeature(), 
         XmppPermission.ALL
     )
 
@@ -129,7 +153,24 @@ To connect extensions to the client, you need to call the ``connect_extension`` 
 
     client.connect_extension(
         OmemoExtension(), 
-        XmppPermission.ALL # or list of permissions
+        [
+            XmppPermission.GET_JID,
+            XmppPermission.SEND_XML,
+            XmppPermission.LISTEN_ON_READY,
+            XmppPermission.LISTEN_ON_IQ,
+            XmppPermission.HOOK_ON_MESSAGE,
+            XmppPermission.HOOK_SEND_MESSAGE,
+        ]
+    )
+    # or
+    client.connect_extension(
+        OmemoExtension(), 
+        OmemoExtension.REQUIRED_PERMISSIONS
+    )
+    # or
+    client.connect_extension(
+        OmemoExtension(), 
+        XmppPermission.ALL
     )
 
 You can see the list of available extensions in the :doc:`extensions` section.
