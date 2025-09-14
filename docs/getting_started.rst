@@ -115,6 +115,9 @@ To connect features to the client, you need to call the ``connect_feature`` meth
 .. code-block:: python
 
     from osmxmpp.features.tls import TlsFeature
+    from osmxmpp.permission import XmppPermission
+
+    # ...create client instance...
 
     client.connect_feature(
         TlsFeature(), 
@@ -137,6 +140,10 @@ To connect features to the client, you need to call the ``connect_feature`` meth
         XmppPermission.ALL
     )
 
+.. note::
+
+    Connect features before connecting to the XMPP server for them to properly work.
+
 You can see the list of available features in the :doc:`features` section.
 
 
@@ -150,6 +157,9 @@ To connect extensions to the client, you need to call the ``connect_extension`` 
 .. code-block:: python
 
     from osmxmpp.extensions.omemo import OmemoExtension
+    from osmxmpp.permission import XmppPermission
+
+    # ...create client instance...
 
     client.connect_extension(
         OmemoExtension(), 
@@ -172,6 +182,10 @@ To connect extensions to the client, you need to call the ``connect_extension`` 
         OmemoExtension(), 
         XmppPermission.ALL
     )
+
+.. note::
+
+    Connect extensions before connecting to the XMPP server for them to properly work.
 
 You can see the list of available extensions in the :doc:`extensions` section.
 
@@ -224,7 +238,9 @@ Here is an example code that connects to the XMPP server, and listens to the ``/
 
 .. code-block:: python
 
-    from osmxmpp import XmppClient, XmppPermission, XmppMessage
+    from osmxmpp.client import XmppClient
+    from osmxmpp.permission import XmppPermission
+    from osmxmpp.message import XmppMessage
     from osmxmpp.features.tls import TlsFeature
     from osmxmpp.features.sasl import SaslFeature, PlainMechanism
 
