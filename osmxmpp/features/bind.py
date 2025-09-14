@@ -1,5 +1,7 @@
 from .abc import XmppFeature
+from ..permission import XmppPermission
 from osmxml import *
+from typing import List
 
 import logging
 

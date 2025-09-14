@@ -1,6 +1,7 @@
 import base64
 from osmxml import *
 from .abc import XmppFeature
+from ..permission import XmppPermission
 
 from abc import ABC, abstractmethod
 from typing import List
