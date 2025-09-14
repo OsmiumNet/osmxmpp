@@ -20,6 +20,15 @@ class TlsFeature(XmppFeature):
 
     RECEIVE_NEW_FEATURES = True
 
+    REQUIRED_PERMISSIONS: List[XmppPermission] = [
+        XmppPermission.SEND_XML,
+        XmppPermission.RECV_XML,
+        XmppPermission.OPEN_STREAM,
+        XmppPermission.GET_HOST,
+        XmppPermission.GET_SOCKET,
+        XmppPermission.CHANGE_SOCKET,
+    ]
+
     def __init__(self, ssl_context=None, verify_locations=None):
         if ssl_context is None:
             logger.debug(f"Creating default SSL context...")

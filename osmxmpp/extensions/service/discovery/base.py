@@ -15,7 +15,7 @@ class ServiceDiscoveryExtension(XmppExtension):
     ID = "osmiumnet.service.discovery"
 
     # List of required permissions
-    REQUIREMENTS: List[XmppPermission] = [
+    REQUIRED_PERMISSIONS: List[XmppPermission] = [
         XmppPermission.SEND_XML,
     ]
 
@@ -24,11 +24,19 @@ class ServiceDiscoveryExtension(XmppExtension):
      
     def _connect_ci(self, ci):
         self.__ci = ci
+    
+    def discover(self):
+        """
+        Sends a service discovery request.
+
+        Example:
+            >>> client.extensions["osmiumnet.service.discovery"].discover()
+        """
+
+        xml = DiscoveryXml.discover()
+        self.__ci.send_xml(xml)
 
     def _process(self):
         # Variables
-        @self.__ci.variables.function
-        def discover():
-            xml = DiscoveryXml.discover()
-            self.__ci.send_xml(xml)
+        self.__ci.variables.function(self.discover)
 

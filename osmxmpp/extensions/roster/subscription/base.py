@@ -17,7 +17,7 @@ class SubscriptionExtension(XmppExtension):
     ID = "osmiumnet.roster.subscription"
 
     # List of required permissions
-    REQUIREMENTS: List[XmppPermission] = [
+    REQUIRED_PERMISSIONS: List[XmppPermission] = [
         XmppPermission.GET_JID,
         XmppPermission.SEND_XML,
         XmppPermission.LISTEN_ON_READY,

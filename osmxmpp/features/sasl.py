@@ -84,6 +84,12 @@ class SaslFeature(XmppFeature):
 
     RECEIVE_NEW_FEATURES = True
 
+    REQUIRED_PERMISSIONS: List[XmppPermission] = [
+        XmppPermission.SEND_XML,
+        XmppPermission.RECV_XML,
+        XmppPermission.OPEN_STREAM,
+    ]
+
     def __init__(self, mechanisms:List[SaslMechanism]):
         self.__mechanisms = mechanisms
     

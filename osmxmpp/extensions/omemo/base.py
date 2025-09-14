@@ -28,7 +28,7 @@ class OmemoExtension(XmppExtension):
     ID = "osmiumnet.omemo"
 
     # List of required permissions
-    REQUIREMENTS: List[XmppPermission] = [
+    REQUIRED_PERMISSIONS: List[XmppPermission] = [
         XmppPermission.GET_JID,
         XmppPermission.SEND_XML,
         XmppPermission.LISTEN_ON_READY,
@@ -70,33 +70,41 @@ class OmemoExtension(XmppExtension):
 
 
         # Variables
-        @self.__ci.variables.function
-        def publish_device_information():
-            xml = OmemoXml.publish_device(self.__ci.get_jid(False), self.__bundle.get_device_id())
-            self.__send_registered_xml(xml, "publish_device:func")
+        self.__ci.variables.function(self.publish_bundle_information)
 
-        @self.__ci.variables.function
-        def fetch_bundles(jid: str | List[str]):
-            if (isinstance(jid, list)):
-                for j in jid:
-                    self.fetch_bundles(j)
-            else:
-                self.fetch_bundles(jid)
+        self.__ci.variables.function(self.fetch_bundles)
+
+    def publish_bundle_information(self):
+        """
+        Publishes the bundle information.
+
+        Example:
+            >>> client.extensions["osmiumnet.omemo"].publish_bundle_information()
+        """
+
+        xml = OmemoXml.publish_device(self.__ci.get_jid(False), self.__bundle.get_device_id())
+        self.__send_registered_xml(xml, "publish_device:func")
 
     def fetch_bundles(self, jid):
         """
         Fetches the bundles from the given JID.
 
         Args:
-            jid (str): The JID to fetch the bundles from.
+            jid (str | List[str]): The JID(s) to fetch the bundles from.
         
         Example:
             >>> client.extensions["osmiumnet.omemo"].fetch_bundles("john@jabber.org")
         """
 
-        xml = OmemoXml.fetch_devices(self.__ci.get_jid(), jid)
-        self.__send_registered_xml(xml, "fetch_devices:func")
+        def _fetch(jid: str):
+            xml = OmemoXml.fetch_devices(self.__ci.get_jid(), jid)
+            self.__send_registered_xml(xml, "fetch_devices:func")
 
+        if (isinstance(jid, list)):
+            for j in jid:
+                _fetch(j)
+        else:
+            _fetch(jid)
 
     def __send_registered_xml(self, xml: XmlElement, name: str):
         self.__register_xml(xml, name)

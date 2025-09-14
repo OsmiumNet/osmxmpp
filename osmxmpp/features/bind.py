@@ -18,6 +18,13 @@ class BindFeature(XmppFeature):
 
     RECEIVE_NEW_FEATURES = False
 
+    REQUIRED_PERMISSIONS: List[XmppPermission] = [
+        XmppPermission.SEND_XML,
+        XmppPermission.RECV_XML,
+        XmppPermission.SET_JID,
+        XmppPermission.SET_RESOURCE,
+    ]
+
     def __init__(self, resource:str):
         self.__resource = resource
     
