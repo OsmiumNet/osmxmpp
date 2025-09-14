@@ -9,6 +9,7 @@ from osmxml import XmlTextElement
 
 from osmomemo import OmemoBundle
 
+
 class OmemoXml:
     @staticmethod
     def send_presence(jid_to: str) -> XmlElement:

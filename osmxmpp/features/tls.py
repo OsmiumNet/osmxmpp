@@ -1,12 +1,18 @@
+import socket
+import ssl
+
+from typing import List
+
 from .abc import XmppFeature
 from ..permission import XmppPermission
+
 from osmxml import *
-import socket, ssl
-from typing import List
 
 import logging
 
+
 logger = logging.getLogger(__name__)
+
 
 class TlsFeature(XmppFeature):
     """

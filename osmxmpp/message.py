@@ -1,5 +1,6 @@
 from osmxml import *
 
+
 class _XmppMessageElement:
     def __init__(self, xml:XmlElement):
         self.__xml = xml

@@ -1,14 +1,18 @@
 import base64
-from osmxml import *
+from abc import ABC, abstractmethod
+
+from typing import List
+
 from .abc import XmppFeature
 from ..permission import XmppPermission
 
-from abc import ABC, abstractmethod
-from typing import List
+from osmxml import *
 
 import logging
 
+
 logger = logging.getLogger(__name__)
+
 
 class SaslException(Exception):
     pass

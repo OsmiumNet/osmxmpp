@@ -1,5 +1,6 @@
 from enum import Enum, auto
 
+
 class XmppPermission(Enum):
     """
     Permissions are used to control what actions Feature or Extension can perform.

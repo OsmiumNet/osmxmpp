@@ -5,6 +5,7 @@ from osmxml import XmlElement
 from osmxml import XmlAttribute
 from osmxml import XmlTextElement
 
+
 class SubscriptionXml:
     @staticmethod
     def check_for_subscription(jid: str) -> XmlElement:

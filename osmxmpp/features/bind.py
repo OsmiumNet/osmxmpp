@@ -1,11 +1,15 @@
+from typing import List
+
 from .abc import XmppFeature
 from ..permission import XmppPermission
+
 from osmxml import *
-from typing import List
 
 import logging
 
+
 logger = logging.getLogger(__name__)
+
 
 class BindFeature(XmppFeature):
     """

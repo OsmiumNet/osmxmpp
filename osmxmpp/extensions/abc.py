@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 
+
 class XmppExtension(ABC):
     """
     Extensions are used to implement specific XMPP extensions & etc.

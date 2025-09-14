@@ -1,15 +1,17 @@
-from osmxml import *
 import socket
-
-from .validation import XmppValidation
-
-from .permission import XmppPermission
 
 from typing import List, Callable
 
+from .validation import XmppValidation
+from .permission import XmppPermission
+
+from osmxml import *
+
 import logging
 
+
 logger = logging.getLogger(__name__)
+
 
 class XmppClientInterface:
     """
@@ -75,7 +77,7 @@ class XmppClientInterface:
         """
         self.__handle_permission(XmppPermission.SEND_XML)
         return self.__client._send_xml(xml)
-    
+    o
     def recv_xml(self) -> XmlElement:
         """
         Receives an XML element from the XMPP client.

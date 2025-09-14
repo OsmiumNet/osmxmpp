@@ -1,7 +1,7 @@
-from osmxml import *
-import socket, ssl
-
+import socket
 import uuid
+
+from typing import Callable, List, Tuple
 
 from .validation import XmppValidation
 from .permission import XmppPermission
@@ -10,11 +10,13 @@ from .features import XmppFeature
 from .extensions import XmppExtension
 from .ci import XmppClientInterface
 
-from typing import Callable, List, Tuple
+from osmxml import *
 
 import logging
 
+
 logger = logging.getLogger(__name__)
+
 
 class XmppClient:
     """

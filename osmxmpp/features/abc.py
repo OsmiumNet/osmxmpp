@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 
+
 class XmppFeature(ABC):
     """
     Features are used to implement specific XMPP stream features.
