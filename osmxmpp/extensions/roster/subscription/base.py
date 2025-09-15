@@ -47,19 +47,55 @@ class SubscriptionExtension(XmppExtension):
             return self.__hook_on_iq(iq)
 
         # Variables
-        @self.__ci.variables.function
-        def on_check_subscriptions(handler:Callable):
-            self.__handlers["on_check_subscriptions"].append(handler)
-            return handler
+        self.__ci.variables.function(self.on_check_subscriptions)
 
-        @self.__ci.variables.function
-        def check_for_subscriptions():
-            xml = SubscriptionXml.check_for_subscription(self.__ci.get_jid(False))
-            self.__ci.send_xml(xml)
+        self.__ci.variables.function(self.check_for_subscriptions)
 
-        @self.__ci.variables.function
-        def ensure_subscription(jid_to: str):
-            self.__ensure_list.append(jid_to)
+        self.__ci.variables.function(self.ensure_subscription)
+
+    def on_check_subscriptions(self, handler:Callable):
+        """
+        Registers a handler for the ``on_check_subscriptions`` event.
+
+        Handler will be called when subscriptions are received.
+
+        Args:
+            handler (Callable): The handler to register.
+        
+        Returns:
+            Callable: The handler (unchanged).
+        
+        Example:
+            >>> @client.extensions["osmiumnet.roster.subscription"].on_check_subscriptions
+            ... def on_check_subscriptions(iq):
+            ...     print(f"Received subscriptions: {iq.body}")
+        """
+
+        self.__handlers["on_check_subscriptions"].append(handler)
+        return handler
+
+    def check_for_subscriptions(self):
+        """
+        Sends a subscription check request.
+
+        Example:
+            >>> client.extensions["osmiumnet.roster.subscription"].check_for_subscriptions()
+        """
+
+        xml = SubscriptionXml.check_for_subscription(self.__ci.get_jid(False))
+        self.__ci.send_xml(xml)
+
+    def ensure_subscription(self, jid_to: str):
+        """
+        Ensures that the JID is subscribed.
+
+        Args:
+            jid_to (str): The JID to ensure.
+
+        Example:
+            >>> client.extensions["osmiumnet.roster.subscription"].ensure_subscription("john@jabber.org")
+        """
+        self.__ensure_list.append(jid_to)
 
 
     def __on_presence(self, presence: XmlElement):
