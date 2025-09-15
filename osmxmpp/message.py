@@ -17,7 +17,7 @@ class _XmppMessageElement:
     
 
     def __getattr__(self, name):
-        if self._xml.get_attribute_by_name(name):
+        if self.__xml.get_attribute_by_name(name):
             return self.__xml.get_attribute_by_name(name).value
         
         return _get_xmpp_message_element_or_text(self.__xml.get_child_by_name(name))
