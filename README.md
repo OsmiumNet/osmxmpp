@@ -1,2 +1,0 @@
-# OSMXMPP
-Python XMPP library  
