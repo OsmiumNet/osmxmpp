@@ -12,15 +12,9 @@ First, you need to create a client instance:
 .. code-block:: python
 
     from osmxmpp import XmppClient
-    client = XmppClient("jabber.org", 5222)
+    client = XmppClient("jabber.org", port=5222)
 
 The first argument is the hostname of the XMPP server, and the second argument is the port.
-
-You can also specify the XMPP server hostname and port in the client instance like this:
-
-.. code-block:: python
-
-    client = XmppClient(host="jabber.org", port=5222)
 
 
 Registering handlers
@@ -234,7 +228,8 @@ This will connect to the XMPP server and start the XMPP stream.
 Example code
 ------------
 
-Here is an example code that connects to the XMPP server, and listens to the ``/test`` command:
+Here is an example code that connects to the XMPP server, and listens to the ``/test`` command.
+This example also uses the ``certifi`` package for getting the SSL certificate locations:
 
 .. code-block:: python
 
@@ -244,8 +239,10 @@ Here is an example code that connects to the XMPP server, and listens to the ``/
     from osmxmpp.features.tls import TlsFeature
     from osmxmpp.features.sasl import SaslFeature, PlainMechanism
 
+    import certifi
 
-    client = XmppClient("5222.de", 5222)
+
+    client = XmppClient("jabber.org", port=5222)
 
     @client.on_disconnect
     def on_disconnect():
@@ -264,14 +261,10 @@ Here is an example code that connects to the XMPP server, and listens to the ``/
             client.send_message(message.from_jid, "Hello!")
         
     client.connect_feature(
-        TlsFeature(), 
-        [
-            XmppPermission.SEND_XML, 
-            XmppPermission.RECV_XML, 
-            XmppPermission.CHANGE_SOCKET, 
-            XmppPermission.GET_SOCKET, 
-            XmppPermission.OPEN_STREAM
-        ]
+        TlsFeature(
+            verify_locations=certifi.where()
+        ), 
+        TlsFeature.REQUIRED_PERMISSIONS
     )
 
     client.connect_feature(
@@ -280,14 +273,14 @@ Here is an example code that connects to the XMPP server, and listens to the ``/
                 PlainMechanism("john", "drowssap") # username and password
             ]
         ), 
-        XmppPermission.ALL
+        SaslFeature.REQUIRED_PERMISSIONS
     )
 
     client.connect_feature(
         BindFeature(
             "osmxmpp" # resource
         ), 
-        XmppPermission.ALL
+        BindFeature.REQUIRED_PERMISSIONS
     )
 
     try:
